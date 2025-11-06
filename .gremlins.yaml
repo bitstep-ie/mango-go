@@ -1,0 +1,25 @@
+unleash:
+  workers: 1 # Not running tests in parallel as they are not parallel ready
+  threshold:
+    efficacy: 93 # due to 2 bugs in gremlins threshold checks & reports
+# On top of the bugs mentioned above, there are cases that are not coverable
+    mutant-coverage: 95 # due to 2 bugs in gremlins threshold checks & reports
+# PR opened in gremlins: https://github.com/go-gremlins/gremlins/pull/248
+# Bug reported: https://github.com/go-gremlins/gremlins/issues/249
+
+mutants:
+  #  Adding the non default mutants
+  invert-assignments:
+    enabled: true
+  invert-bitwise:
+    enabled: true
+  invert-bwassign:
+    enabled: true
+  invert-negatives:
+    enabled: true
+  invert-logical:
+    enabled: true
+  invert-loopctrl:
+    enabled: true
+  remove-self-assignments:
+    enabled: true
