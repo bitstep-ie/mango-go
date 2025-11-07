@@ -20,7 +20,7 @@ type MangoLogger struct {
 	LogWriter *lumberjack.Logger
 }
 
-var StrictModeOn = errors.New(fmt.Sprintf("[STRICT_MODE ON] without required context fields %v", REQUIRED_FIELDS))
+var strictModeOn = errors.New(fmt.Sprintf("[STRICT_MODE ON] without required context fields %v", REQUIRED_FIELDS))
 
 func NewMangoLogger(config *LogConfig) *MangoLogger {
 	// Future idea to have multiple "appenders" in the mangoLogger that one can add, each with it's own logging configuration that it looks at
@@ -279,11 +279,11 @@ func handleValueMissing(label ctxKey, sl MangoLogger, logOutput *StructuredLog) 
 		if sl.Config.MangoConfig.CorrelationId.AutoGenerate {
 			logOutput.Correlationid = uuid.New().String() // generate new UUID for correlation if missing from context
 		} else {
-			return fmt.Errorf("%w - required in context and not present (or wrong type - expected string). This can be added by doing: context.WithValue(newCtx, mangologger.%s, \"desiredValue\")", StrictModeOn, label)
+			return fmt.Errorf("%w - required in context and not present (or wrong type - expected string). This can be added by doing: context.WithValue(newCtx, mangologger.%s, \"desiredValue\")", strictModeOn, label)
 		}
 	} else {
 		if sl.Config.MangoConfig.Strict {
-			return fmt.Errorf("%w - required in context and not present (or wrong type - expected string). This can be added by doing: context.WithValue(newCtx, mangologger.%s, \"desiredValue\")", StrictModeOn, label)
+			return fmt.Errorf("%w - required in context and not present (or wrong type - expected string). This can be added by doing: context.WithValue(newCtx, mangologger.%s, \"desiredValue\")", strictModeOn, label)
 		}
 	}
 	return nil
@@ -298,7 +298,7 @@ func handleExistentValues(label ctxKey, logOutput *StructuredLog, value string, 
 	case TYPE:
 		if sl.Config.MangoConfig.Strict {
 			if !slices.Contains(ALLOWED_TYPES, value) {
-				return fmt.Errorf("%w - [%s] required in context and not present (or wrong type - expected string). Current value [%s] is not in the allowed list: %+q", StrictModeOn, label, value, ALLOWED_TYPES)
+				return fmt.Errorf("%w - [%s] required in context and not present (or wrong type - expected string). Current value [%s] is not in the allowed list: %+q", strictModeOn, label, value, ALLOWED_TYPES)
 			}
 		}
 		logOutput.Type = value

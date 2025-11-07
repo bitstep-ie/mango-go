@@ -129,7 +129,7 @@ func TestMangoLogger_Handle_StrictModeOn_Failing(t *testing.T) {
 
 	err := mangoLogger.Handle(context.Background(), logRecord)
 	if err != nil {
-		if !errors.Is(err, StrictModeOn) {
+		if !errors.Is(err, strictModeOn) {
 			t.Errorf("Error expected from handling strict mode without enough context info")
 		}
 	} else {
@@ -147,7 +147,7 @@ func TestMangoLogger_Handle_StrictModeOn_InvalidType(t *testing.T) {
 
 	err := mangoLogger.Handle(logContext, logRecord)
 	if err != nil {
-		if !errors.Is(err, StrictModeOn) {
+		if !errors.Is(err, strictModeOn) {
 			t.Errorf("Error expected from handling strict mode without enough context info")
 		}
 	} else {
@@ -164,7 +164,7 @@ func TestMangoLogger_Handle_StrictModeOn_NoApplication(t *testing.T) {
 
 	err := mangoLogger.Handle(logContext, logRecord)
 	if err != nil {
-		if !errors.Is(err, StrictModeOn) {
+		if !errors.Is(err, strictModeOn) {
 			t.Errorf("Error expected from handling strict mode without enough context info")
 		}
 	} else {
@@ -182,7 +182,7 @@ func TestMangoLogger_Handle_StrictModeOn_NoOperation(t *testing.T) {
 
 	err := mangoLogger.Handle(logContext, logRecord)
 	if err != nil {
-		if !errors.Is(err, StrictModeOn) {
+		if !errors.Is(err, strictModeOn) {
 			t.Errorf("Error expected from handling strict mode without enough context info")
 		}
 	} else {
@@ -201,7 +201,7 @@ func TestMangoLogger_Handle_StrictModeOn_NoCorrelationGenerated(t *testing.T) {
 
 	err := mangoLogger.Handle(logContext, logRecord)
 	if err != nil {
-		if !errors.Is(err, StrictModeOn) {
+		if !errors.Is(err, strictModeOn) {
 			t.Errorf("Error expected from handling strict mode without enough context info")
 		}
 	} else {
@@ -1657,7 +1657,7 @@ func TestMangoLogger_Handle_StrictModeOn_Facility_Invalid(t *testing.T) {
 
 func readPipe(r *os.File) string {
 	var buf bytes.Buffer
-	buf.ReadFrom(r)
+	_, _ = buf.ReadFrom(r)
 	return buf.String()
 }
 
