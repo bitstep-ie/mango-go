@@ -1,3 +1,5 @@
+# CI does NOT use the make file
+# Makefile purpose is to help execute the CI workflow on local
 name: CI
 
 on:
@@ -39,9 +41,11 @@ jobs:
     steps:
       - run: echo "Matrix defined"
   # ---------------------------
-  # 🧹 Lint Job
+  # 🧹 Check Job
+  # - golangci-lint
+  # - go vet
   # ---------------------------
-  lint:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,12 +61,15 @@ jobs:
         with:
           version: v2.1.6
           args: --verbose
+      - name: vet
+        run: go vet ./...
+
 
   # ---------------------------
   # 🏗️ Build Job
   # ---------------------------
   build:
-    needs: [_define, lint]
+    needs: [_define, check]
     strategy:
       matrix: *go-matrix
     name: Build (${{ matrix.os }} Go ${{ matrix.go }})
@@ -91,9 +98,9 @@ jobs:
         run: go build ./...
 
   # ---------------------------
-  # 🧪 Test Job
+  # 🧪 Validate Job
   # ---------------------------
-  test:
+  validate:
     needs: [_define, build]
     strategy:
       matrix: *go-matrix
@@ -130,3 +137,8 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           flags: ${{ matrix.os }},go-${{ matrix.go }}
+
+      - name: Gremlins - install
+        run: go install github.com/go-gremlins/gremlins/cmd/gremlins@v0.5.0
+      - name: Gremlins - exec
+        run: gremlins unleash --config=.gremlins.yaml --output=gremlins.json
