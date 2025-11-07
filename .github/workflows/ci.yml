@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------
+  # 🔧 Define Strategy Matrix
+  # ---------------------------
+  define-strategy-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo '{
+            "os": ["ubuntu-latest", "macos-latest"],
+            "go": ["1.24", "1.25"],
+            "test-tags": [
+              "",
+              "-tags nomsgpack",
+              "--ldflags=\"-checklinkname=0\" -tags sonic",
+              "-tags go_json",
+              "-race"
+            ],
+            "include": [
+              {"os": "ubuntu-latest", "go-build": "~/.cache/go-build"},
+              {"os": "macos-latest", "go-build": "~/Library/Caches/go-build"}
+            ]
+          }' > matrix.json
+          echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+
+  # ---------------------------
+  # 🧹 Lint Job
+  # ---------------------------
+  lint:
+    needs: define-strategy-matrix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "^1"
+      - name: Setup golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.1.6
+          args: --verbose
+
+  # ---------------------------
+  # 🏗️ Build Job
+  # ---------------------------
+  build:
+    needs: [define-strategy-matrix, lint]
+    strategy:
+      matrix: ${{ fromJson(needs.define-strategy-matrix.outputs.matrix) }}
+    name: Build (${{ matrix.os }} Go ${{ matrix.go }})
+    runs-on: ${{ matrix.os }}
+    env:
+      GO111MODULE: on
+      GOPROXY: https://proxy.golang.org
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ${{ matrix.go-build }}
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ matrix.go }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ matrix.go }}-
+
+      - name: Build Project
+        run: go build ./...
+
+  # ---------------------------
+  # 🧪 Test Job
+  # ---------------------------
+  test:
+    needs: [define-strategy-matrix, build]
+    strategy:
+      matrix: ${{ fromJson(needs.define-strategy-matrix.outputs.matrix) }}
+    name: Test (${{ matrix.os }} Go ${{ matrix.go }} ${{ matrix.test-tags }})
+    runs-on: ${{ matrix.os }}
+    env:
+      GO111MODULE: on
+      TESTTAGS: ${{ matrix.test-tags }}
+      GOPROXY: https://proxy.golang.org
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ${{ matrix.go-build }}
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ matrix.go }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ matrix.go }}-
+
+      - name: Run Tests
+        run: go test -v --cover ./... -coverprofile=coverage.out -covermode=count -json
+#
+#      - name: Upload coverage to Codecov
+#        uses: codecov/codecov-action@v5
+#        with:
+#          flags: ${{ matrix.os }},go-${{ matrix.go }},${{ matrix.test-tags }}
