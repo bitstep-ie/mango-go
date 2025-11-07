@@ -55,10 +55,7 @@ func Sign() int {
 
 // Bool returns either true or false randomly
 func Bool() bool {
-	if rand.Intn(2) == 0 {
-		return true
-	}
-	return false
+	return rand.Intn(2) == 0
 }
 
 // Choice picks a random element from a non-empty slice

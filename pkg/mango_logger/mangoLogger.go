@@ -259,7 +259,7 @@ func (sl MangoLogger) handleRequiredFields(context context.Context, logOutput *S
 	return nil
 }
 
-func handleEachField(context context.Context, logOutput *StructuredLog, label string, sl MangoLogger) error {
+func handleEachField(context context.Context, logOutput *StructuredLog, label ctxKey, sl MangoLogger) error {
 	if value, ok := context.Value(label).(string); !ok {
 		err := handleValueMissing(label, sl, logOutput)
 		if err != nil {
@@ -274,7 +274,7 @@ func handleEachField(context context.Context, logOutput *StructuredLog, label st
 	return nil
 }
 
-func handleValueMissing(label string, sl MangoLogger, logOutput *StructuredLog) error {
+func handleValueMissing(label ctxKey, sl MangoLogger, logOutput *StructuredLog) error {
 	if CORRELATION_ID == label {
 		if sl.Config.MangoConfig.CorrelationId.AutoGenerate {
 			logOutput.Correlationid = uuid.New().String() // generate new UUID for correlation if missing from context
@@ -289,7 +289,7 @@ func handleValueMissing(label string, sl MangoLogger, logOutput *StructuredLog) 
 	return nil
 }
 
-func handleExistentValues(label string, logOutput *StructuredLog, value string, sl MangoLogger) error {
+func handleExistentValues(label ctxKey, logOutput *StructuredLog, value string, sl MangoLogger) error {
 	switch label { // set actual
 	case OPERATION:
 		logOutput.Operation = value
