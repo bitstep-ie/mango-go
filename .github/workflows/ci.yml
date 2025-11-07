@@ -96,7 +96,7 @@ jobs:
   test:
     needs: [_define, build]
     strategy:
-      matrix: ${{ fromJson(needs.define-strategy-matrix.outputs.matrix) }}
+      matrix: *go-matrix
     name: Test (${{ matrix.os }} Go ${{ matrix.go }} ${{ matrix.test-tags }})
     runs-on: ${{ matrix.os }}
     env:
@@ -125,8 +125,9 @@ jobs:
 
       - name: Run Tests
         run: go test -v --cover ./... -coverprofile=coverage.out -covermode=count -json
-#
-#      - name: Upload coverage to Codecov
-#        uses: codecov/codecov-action@v5
-#        with:
-#          flags: ${{ matrix.os }},go-${{ matrix.go }},${{ matrix.test-tags }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.os }},go-${{ matrix.go }},${{ matrix.test-tags }}
