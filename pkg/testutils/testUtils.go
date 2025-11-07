@@ -16,7 +16,9 @@ func MustMakeTempFile(t *testing.T, tempDir string, fileNamePattern string) *os.
 	if err != nil {
 		assert.Fail(t, "Failed to create temp file: %v", err)
 	}
-	defer textFile.Close()
+	defer func(textFile *os.File) {
+		_ = textFile.Close()
+	}(textFile)
 	return textFile
 }
 

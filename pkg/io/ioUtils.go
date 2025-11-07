@@ -123,7 +123,7 @@ func copyFile(dest string, source string) error {
 	defer func(sourceFile *os.File) {
 		err := sourceFile.Close()
 		if err != nil {
-			_ = fmt.Errorf("issue handling %s file", sourceFile)
+			_ = fmt.Errorf("issue handling %s file", sourceFile.Name())
 		}
 	}(sourceFile)
 
@@ -134,7 +134,7 @@ func copyFile(dest string, source string) error {
 	defer func(destFile *os.File) {
 		err := destFile.Close()
 		if err != nil {
-			_ = fmt.Errorf("issue handling %s file", sourceFile)
+			_ = fmt.Errorf("issue handling %s file", sourceFile.Name())
 
 		}
 	}(destFile)

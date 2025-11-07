@@ -196,7 +196,7 @@ func (sl MangoLogger) handlePromptOutput(log *StructuredLog, jsonOut string) err
 			_, _ = fmt.Fprintln(os.Stdout, result)
 		}
 	case slog.LevelInfo:
-		if sl.Config.Out.Cli.Friendly == true {
+		if sl.Config.Out.Cli.Friendly {
 			result, _ := formatWithGoJQ(jsonOut, sl.Config.Out.Cli.FriendlyFormat)
 			_, _ = fmt.Fprintln(os.Stdout, result)
 		} else {
@@ -205,7 +205,7 @@ func (sl MangoLogger) handlePromptOutput(log *StructuredLog, jsonOut string) err
 	case slog.LevelWarn:
 		fallthrough
 	case slog.LevelError:
-		if sl.Config.Out.Cli.Friendly == true {
+		if sl.Config.Out.Cli.Friendly {
 			result, _ := formatWithGoJQ(jsonOut, sl.Config.Out.Cli.FriendlyFormat)
 			_, _ = fmt.Fprintln(os.Stderr, result)
 		} else {

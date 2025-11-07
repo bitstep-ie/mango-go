@@ -10,7 +10,7 @@ import (
 
 func (sl MangoLogger) handleSyslogOutput(log *StructuredLog, jsonOut []byte) error {
 
-	severity := syslog.LOG_EMERG
+	var severity = syslog.LOG_EMERG
 	switch log.Level {
 	case slog.LevelDebug:
 		severity = syslog.LOG_DEBUG
@@ -22,6 +22,8 @@ func (sl MangoLogger) handleSyslogOutput(log *StructuredLog, jsonOut []byte) err
 		severity = syslog.LOG_ERR
 	default:
 		fmt.Println("Record level not one of: debug, info, warn or error")
+	}
+	if severity == syslog.LOG_EMERG {
 		return fmt.Errorf("record level not one of: debug, info, warn or error")
 	}
 
@@ -75,7 +77,12 @@ func (sl MangoLogger) handleSyslogOutput(log *StructuredLog, jsonOut []byte) err
 		return fmt.Errorf("error writing to syslog: %w", err)
 	}
 
-	defer syslogWriter.Close()
+	defer func(syslogWriter *syslog.Writer) {
+		err := syslogWriter.Close()
+		if err != nil {
+			_ = fmt.Errorf("failed to close syslog writer %w", err)
+		}
+	}(syslogWriter)
 
 	_, err = syslogWriter.Write(jsonOut)
 	return err

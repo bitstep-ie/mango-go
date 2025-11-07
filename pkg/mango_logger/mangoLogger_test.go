@@ -354,9 +354,9 @@ func TestMangoLogger_Handle_UnknownLevel_NoCLI_FileOnly(t *testing.T) {
 	// Action to test
 	err := mangoLogger.Handle(logContext, logRecord)
 	if err != nil {
-		w.Close()
+		_ = w.Close()
 		gotStdOut := readPipe(r)
-		wStdErr.Close()
+		_ = wStdErr.Close()
 		gotStdErr := readPipe(rStdErr)
 
 		assert.ErrorContains(t, err, "record level not one of: debug, info, warn or error")
@@ -399,9 +399,9 @@ func TestMangoLogger_Handle_CLINonFriendly_ValidInfo(t *testing.T) {
 		t.Errorf("Error not expected from handling this log record")
 	}
 
-	w.Close()
+	_ = w.Close()
 	gotStdOut := readPipe(r)
-	wStdErr.Close()
+	_ = wStdErr.Close()
 	gotStdErr := readPipe(rStdErr)
 
 	assert.Equal(t, "", gotStdErr, "Stderr should be empty") // nothing to stderr
@@ -454,9 +454,9 @@ func TestMangoLogger_Handle_ValidDebug_NoStdOut(t *testing.T) {
 		t.Errorf("Error not expected from handling this log record")
 	}
 
-	w.Close()
+	_ = w.Close()
 	gotStdOut := readPipe(r)
-	wStdErr.Close()
+	_ = wStdErr.Close()
 	gotStdErr := readPipe(rStdErr)
 
 	assert.Equal(t, "", gotStdErr, "Stderr should be empty") // nothing to stderr
@@ -496,9 +496,9 @@ func TestMangoLogger_Handle_ValidDebug_Verbose_VerboseFormatSame(t *testing.T) {
 		t.Errorf("Error not expected from handling this log record")
 	}
 
-	w.Close()
+	_ = w.Close()
 	gotStdOut := readPipe(r)
-	wStdErr.Close()
+	_ = wStdErr.Close()
 	gotStdErr := readPipe(rStdErr)
 
 	assert.Equal(t, "", gotStdErr, "Stderr should be empty") // nothing to stderr
@@ -541,9 +541,9 @@ func TestMangoLogger_Handle_ValidDebug_Verbose_DefaultVerboseFormat(t *testing.T
 		t.Errorf("Error not expected from handling this log record")
 	}
 
-	w.Close()
+	_ = w.Close()
 	gotStdOut := readPipe(r)
-	wStdErr.Close()
+	_ = wStdErr.Close()
 	gotStdErr := readPipe(rStdErr)
 
 	var logEntry StructuredLog
