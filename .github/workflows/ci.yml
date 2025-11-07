@@ -131,19 +131,21 @@ jobs:
           flags: ${{ matrix.os }},go-${{ matrix.go }}
 
 
- # ---------------------------
+  # ---------------------------
   # 🐉 Gremlins Job
   # ---------------------------
   gremlins:
     needs: [build]
-    name: Unleas Gremlins
+    name: Unleash Gremlins
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
       GOPROXY: https://proxy.golang.org
     steps:
       - name: Install
-        run: go install github.com/go-gremlins/gremlins/cmd/gremlins@v0.5.0
+        run: | 
+          go install github.com/go-gremlins/gremlins/cmd/gremlins@v0.5.0
+          echo "$HOME/go/bin" >> $GITHUB_PATH
 
       - name: Unleash
         run: gremlins unleash --config=.gremlins.yaml --output=gremlins.json
