@@ -1,7 +1,7 @@
 # Purpose of the makefile is to replicate the CI locally
 
 .PHONY: all
-all: check build validate
+all: check build test gremlins
 
 # ---------------------------
 # 🧹 Check Job
@@ -28,15 +28,16 @@ build:
 
 
 # ---------------------------
-# 🧪 Validate Job
+# 🧪 Test Job
 # ---------------------------
-.PHONY: validate
-validate: test gremlins
-
 .PHONY: test
 test:
 	go test -v --cover ./... -coverprofile=coverage.out -covermode=count -json &> report.json
 
+
+# ---------------------------
+# 🐉 Gremlins Job
+# ---------------------------
 .PHONY: gremlins
 gremlins: gremlins-install gremlins-run
 

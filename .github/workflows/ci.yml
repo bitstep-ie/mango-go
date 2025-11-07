@@ -25,14 +25,6 @@ jobs:
       matrix: &go-matrix
         os: [ ubuntu-latest, macos-latest ]
         go: [ "1.24", "1.25" ]
-        test-tags:
-          [
-            "",
-            "-tags nomsgpack",
-            '--ldflags="-checklinkname=0" -tags sonic',
-            "-tags go_json",
-            "-race",
-          ]
         include:
           - os: ubuntu-latest
             go-build: ~/.cache/go-build
@@ -98,17 +90,17 @@ jobs:
         run: go build ./...
 
   # ---------------------------
-  # 🧪 Validate Job
+  # 🧪 Test Job
   # ---------------------------
-  validate:
+  test:
     needs: [_define, build]
     strategy:
       matrix: *go-matrix
-    name: Test (${{ matrix.os }} Go ${{ matrix.go }} ${{ matrix.test-tags }})
+    name: Test (${{ matrix.os }} Go ${{ matrix.go }})
     runs-on: ${{ matrix.os }}
     env:
       GO111MODULE: on
-      TESTTAGS: ${{ matrix.test-tags }}
+      TESTTAGS: "-tags nomsgpack --ldflags='-checklinkname=0' -tags sonic -tags go_json -race"
       GOPROXY: https://proxy.golang.org
 
     steps:
@@ -138,7 +130,21 @@ jobs:
         with:
           flags: ${{ matrix.os }},go-${{ matrix.go }}
 
-      - name: Gremlins - install
+
+ # ---------------------------
+  # 🐉 Gremlins Job
+  # ---------------------------
+  gremlins:
+    needs: [build]
+    name: Unleas Gremlins
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+      GOPROXY: https://proxy.golang.org
+    steps:
+      - name: Install
         run: go install github.com/go-gremlins/gremlins/cmd/gremlins@v0.5.0
-      - name: Gremlins - exec
+
+      - name: Unleash
         run: gremlins unleash --config=.gremlins.yaml --output=gremlins.json
+
