@@ -23,7 +23,7 @@ jobs:
       matrix: ${{ toJson(matrix) }}
     strategy:
       matrix: &go-matrix
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         go: [ "1.24", "1.25" ]
         include:
           - os: ubuntu-latest
