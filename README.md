@@ -29,54 +29,55 @@
             💡 Request Feature
         </a>
     </p>
+    <!-- TABLE OF CONTENTS -->
+    <details>
+      <summary>📂 Table of Contents</summary>
+      <ol>
+        <li>
+            <a href="#about-the-project">📋 About The Project</a>
+        </li>
+        <li>
+            <a href="#getting-started">🚀 Getting Started</a>
+            <ul>
+                <li><a href="#installation">🛠️ Installation</a></li>
+                <li><a href="#packages">📦 Packages</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#usage">👨‍💻 Usage</a>
+        </li>
+        <li>
+            <a href="#contributing">📝 Contributing</a>
+            <ul>
+                <li><a href="#make">🔧 Make</a></li>
+                <li><a href="#structure">📐 Structure</a></li>
+                <li><a href="#filename-convention">🔖 Filename convention</a></li>
+                <li><a href="#gremlins-coverage">👹 Gremlins coverage</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#license">📜 License</a>
+        </li>
+        <li>
+            <a href="#acknowledgments">👏 Acknowledgments</a>
+            <ul>
+                <a href="#contributors">🤝 Contributors</a>
+            </ul>
+        </li>
+      </ol>
+    </details>
 </div>
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>📂 Table of Contents</summary>
-  <ol>
-    <li>
-        <a href="#📋-about-the-project">📋 About The Project</a>
-    </li>
-    <li>
-        <a href="#🚀-getting-started">🚀 Getting Started</a>
-        <ul>
-            <li><a href="#🛠️-installation">🛠️ Installation</a></li>
-            <li><a href="#📦-packages">📦 Packages</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#👨‍💻-usage">👨‍💻 Usage</a>
-    </li>
-    <li>
-        <a href="#📝-contributing">📝 Contributing</a>
-        <ul>
-            <li><a href="#🔧-make">🔧 Make</a></li>
-            <li><a href="#📐-structure">📐 Structure</a></li>
-            <li><a href="#🔖-filename-convention">🔖 Filename convention</a></li>
-            <li><a href="#👹-gremlins-coverage">👹 Gremlins coverage</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#📜-license">📜 License</a>
-    </li>
-    <li>
-        <a href="#👏-acknowledgments">👏 Acknowledgments</a>
-        <ul>
-            <a href="#🤝-contributors">🤝 Contributors</a>
-        </ul>
-    </li>
-  </ol>
-</details>
-
-## 📋 About the project
-
-## 🚀 Getting started
-
-### 🛠️ Installation
 
 
-### 📦 Packages 
+## <a id="about-the-project"></a>📋 About the project
+
+## <a id="getting-started"></a>🚀 Getting started
+
+### <a id="installation"></a>🛠️ Installation
+
+
+### <a id="packages"></a>📦 Packages 
 
 - compare
 - env
@@ -86,18 +87,18 @@
 - time
 
 
-## 👨‍💻 Usage
+## <a id="usage"></a>👨‍💻 Usage
 
 
 
 
-## 📝 Contributing
+## <a id="contributing"></a>📝 Contributing
 
 Do you have a useful function? Do you have something that could be useful to others?
 
 Yes please! [See our starting guidelines](contributing.md). Your help is very welcome!
 
-### 🔧 Make
+### <a id="make"></a>🔧 Make
 
 You can use `make all` to ensure all the checks are performed before you push the code on a remote branch and open PR which will execute the github actions.
 
@@ -107,29 +108,29 @@ This makefile will NOT be used as part of builds.
 
 It is up to you if you deviate from the github actions, do so at your own risk and should not be committed back into the project.
 
-### 📐 Structure
+### <a id="structure"></a>📐 Structure
 
 Try to keep common functions in existing packages, and follow the same pattern if required to create a new package. Update documentation as required, and make sure to note any breaking changes clearly in the PR and ofc debate on the mango teams channel if it requires and how to handle version increase.
 
-### 🔖 Filename convention
+### <a id="filename-convention"></a>🔖 Filename convention
 For basic packages try to match to this convention:
 `smallCaseUtils.go`
 `smallCaseUtils_test.go`
 
 Larger packages requiring multiple files (e.g: `mclogger`), has no current structure convention.
 
-### 👹 Gremlins coverage
+### <a id="gremlins-coverage"></a>👹 Gremlins coverage
 
 Both `efficacy` & `mutant-coverage` sit at `95%`. Aim for this or higher, the build will fail if these thresholds are not met. Under committee review if necessary these thresholds will be reviewed.
 
 
-## 📜 License
+## <a id="license"></a>📜 License
 
 
-## 👏 Acknowledgments
+## <a id="acknowledgments"></a>👏 Acknowledgments
 
 
-### 🤝 Contributors
+### <a id="contributors"></a>🤝 Contributors
 
 Thanks goes to these wonderful people:
 
