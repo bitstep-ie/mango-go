@@ -11,8 +11,8 @@
     </style>
 
     <!-- Light theme image -->
-    <image class="light" href="./mango-with-text-black.png" x="0" y="0" width="180" height="180" />
+    <image class="light" href="https://raw.githubusercontent.com/bitstep-ie/mango-go/refs/heads/main/images/mango-with-text-black.png" x="0" y="0" width="180" height="180" />
 
     <!-- Dark theme image -->
-    <image class="dark" href="./mango-with-text-white.png" x="0" y="0" width="180" height="180" />
+    <image class="dark" href="https://raw.githubusercontent.com/bitstep-ie/mango-go/refs/heads/main/images/mango-with-text-white.png" x="0" y="0" width="180" height="180" />
 </svg>
