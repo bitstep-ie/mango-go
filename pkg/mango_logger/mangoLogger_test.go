@@ -271,7 +271,7 @@ func TestHandleFileOutput_AllLevels(t *testing.T) {
 }
 
 func TestHandleFileOutput_FileDisabled(t *testing.T) {
-	tmpFile, err := os.CreateTemp("", "should_not_exist-*.log")
+	tmpFile, _ := os.CreateTemp("", "should_not_exist-*.log")
 	// Logger config with file output disabled
 	config := &LogConfig{
 		Out: &OutConfig{
@@ -302,7 +302,7 @@ func TestHandleFileOutput_FileDisabled(t *testing.T) {
 	jsonOut := `{"Level":"INFO","Message":"Should not write"}`
 
 	// Should not error even if file is disabled
-	err = logger.handleFileOutput(logOutput, jsonOut)
+	err := logger.handleFileOutput(logOutput, jsonOut)
 	assert.NoError(t, err)
 }
 
