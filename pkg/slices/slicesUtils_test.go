@@ -5,6 +5,43 @@ import (
 	"testing"
 )
 
+func TestFlatten(t *testing.T) {
+	t.Run("flattens slices of ints", func(t *testing.T) {
+		input := [][]int{{1, 2}, {3, 4, 5}, {}}
+		expected := []int{1, 2, 3, 4, 5}
+		result := Flatten(input)
+		assert.Equal(t, expected, result)
+	})
+
+	t.Run("flattens slices of strings", func(t *testing.T) {
+		input := [][]string{{"a", "b"}, {}, {"c"}}
+		expected := []string{"a", "b", "c"}
+		result := Flatten(input)
+		assert.Equal(t, expected, result)
+	})
+
+	t.Run("returns empty slice for empty input", func(t *testing.T) {
+		input := [][]int{}
+		expected := []int{}
+		result := Flatten(input)
+		assert.Equal(t, expected, result)
+	})
+
+	t.Run("returns empty slice for slices of empty slices", func(t *testing.T) {
+		input := [][]int{{}, {}, {}}
+		expected := []int{}
+		result := Flatten(input)
+		assert.Equal(t, expected, result)
+	})
+
+	t.Run("preserves order of elements", func(t *testing.T) {
+		input := [][]int{{1}, {2, 3}, {4}}
+		expected := []int{1, 2, 3, 4}
+		result := Flatten(input)
+		assert.Equal(t, expected, result)
+	})
+}
+
 func TestCompareStringArraysMatching(t *testing.T) {
 	areEqual := EqualsIgnoreOrder([]string{"Hello", "World"}, []string{"Hello", "World"})
 	assert.True(t, areEqual, "The arrays are equal")

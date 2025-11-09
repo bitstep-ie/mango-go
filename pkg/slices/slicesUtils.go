@@ -1,6 +1,33 @@
 // Package slices provides helpful functions for slices
 package slices
 
+// Flatten takes a slice of slices of type T and returns a single slice containing
+// all elements of the nested slices in the same order.
+//
+// The function first calculates the total number of elements across all inner
+// slices to allocate the output slice with the correct capacity, improving
+// performance by avoiding multiple reallocations. It then appends each inner
+// slice to the output slice sequentially.
+//
+// Example:
+//
+//	nums := [][]int{{1, 2}, {3, 4, 5}}
+//	flat := Flatten(nums) // flat == []int{1, 2, 3, 4, 5}
+//
+// Type Parameters:
+//   - T: any type
+func Flatten[T any](slices [][]T) []T {
+	var total int
+	for _, s := range slices {
+		total += len(s)
+	}
+	out := make([]T, 0, total)
+	for _, s := range slices {
+		out = append(out, s...)
+	}
+	return out
+}
+
 // EqualsIgnoreOrder compares two splices ignoring the order of elements
 // It returns true if both slices contain the same elements (and same frequency of same elements), regardless of order
 func EqualsIgnoreOrder[ComparableSlice ~[]Type, Type comparable](s1 ComparableSlice, s2 ComparableSlice) bool {
