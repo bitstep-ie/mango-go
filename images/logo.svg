@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100">
+    <style>
+        /* Show dark image only in dark mode */
+        .dark { display: none; }
+        .light { display: block; }
+
+        @media (prefers-color-scheme: dark) {
+        .dark { display: block; }
+        .light { display: none; }
+        }
+    </style>
+
+    <!-- Light theme image -->
+    <image class="light" href="./mango-with-text-black.png" x="0" y="0" width="180" height="180" />
+
+    <!-- Dark theme image -->
+    <image class="dark" href="./mango-with-text-white.png" x="0" y="0" width="180" height="180" />
+</svg>
