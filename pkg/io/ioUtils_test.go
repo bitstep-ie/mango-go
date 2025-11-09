@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -286,7 +287,11 @@ func TestGetFilesWithExtFailFindingDir(t *testing.T) {
 		t.Errorf("Expected to fail as folder does not exist")
 	} else {
 		assert.Equal(t, 0, len(ext), "Wrong number of files found")
-		assert.Equal(t, err.Error(), "lstat unknownTestFolder: no such file or directory")
+		if runtime.GOOS == "windows" {
+			assert.Equal(t, "CreateFile unknownTestFolder: The system cannot find the file specified.", err.Error())
+		} else {
+			assert.Equal(t, "lstat unknownTestFolder: no such file or directory", err.Error())
+		}
 	}
 }
 
@@ -295,6 +300,10 @@ func TestDeleteFilesNonExistentFile(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected to fail as file does not exist")
 	} else {
-		assert.Equal(t, err.Error(), "failed to delete file unknownTestFile: remove unknownTestFile: no such file or directory")
+		if runtime.GOOS == "windows" {
+			assert.Equal(t, "failed to delete file unknownTestFile: remove unknownTestFile: The system cannot find the file specified.", err.Error())
+		} else {
+			assert.Equal(t, "failed to delete file unknownTestFile: remove unknownTestFile: no such file or directory", err.Error())
+		}
 	}
 }
