@@ -15,7 +15,8 @@ jobs:
         run: |
           TAG_NAME="${{ github.event.release.tag_name }}"
           RELEASE_BODY="${{ github.event.release.body }}"
-          sed -i "2i ## $TAG_NAME\n\n$RELEASE_BODY\n" docs/changelog.md 
+          BODY=$(printf "%s" "$RELEASE_BODY" | sed 's/[&/\]/\\&/g')
+          sed -i "2i ## $TAG_NAME\n\n$BODY\n" docs/changelog.md
 
       - name: Commit and push updated changelog
         run: |
