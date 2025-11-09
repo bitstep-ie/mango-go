@@ -12,7 +12,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Append release notes to changelog
-        run: sed -i "2i ## ${{ github.event.release.tag_name }} \n\n ${{ github.event.release.body }}\n" docs/changelog.md
+        run: |
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          RELEASE_BODY="${{ github.event.release.body }}"
+          sed -i "2i ## $TAG_NAME\n\n$RELEASE_BODY\n" docs/changelog.md 
 
       - name: Commit and push updated changelog
         run: |
