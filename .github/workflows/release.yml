@@ -1,73 +1,76 @@
-name: Release Workflow
+name: Release
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. v1.2.0)'
+        required: true
+
+permissions:
+  contents: write       # Allows creating tags and updating files
+  pages: write          # Allows publishing Hugo docs
+  id-token: write       # Required for some deploy actions
 
 jobs:
-  update-changelog:
+  release:
     runs-on: ubuntu-latest
+    # Only allow users with write access to trigger
+    if: github.actor != '' # GitHub enforces workflow_dispatch permissions
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
         with:
-          ref: ${{ github.event.release.target_commitish }}
-          fetch-depth: 0
-          persist-credentials: true
+          go-version: 1.22
 
-      - name: Append release notes to changelog
+      - name: Configure Git
         run: |
-          TAG_NAME="${{ github.event.release.tag_name }}"
-          RELEASE_BODY="${{ github.event.release.body }}"
-          CHANGELOG_FILE="docs/changelog.md"
-      
-          # Ensure changelog exists with at least a heading
-          if [ ! -f "$CHANGELOG_FILE" ]; then
-            echo "# Changelog" > "$CHANGELOG_FILE"
-          fi
-      
-          if [ -z "$RELEASE_BODY" ]; then
-            RELEASE_BODY="No release notes provided."
-          fi
-      
-          # Split the heading and the rest of the changelog
-          HEADING=$(head -n 1 "$CHANGELOG_FILE")
-          REST=$(tail -n +2 "$CHANGELOG_FILE")
-      
-          # Prepend release notes after heading
-          {
-            echo "$HEADING"
-            echo "\n"
-            printf '## %s\n\n%s\n\n' "$TAG_NAME" "$RELEASE_BODY"
-            echo "$REST"
-          } > "$CHANGELOG_FILE"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
 
-      - name: Commit and push updated changelog
+      - name: Create Git tag
         run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
-          git remote set-url origin https://${{ secrets.RELEASE_WORKFLOW }}@github.com/bitstep-ie/mango-go.git
-          git add docs/changelog.md
-          # only commit if there are changes
-          if ! git diff --cached --quiet; then
-            git commit -m "Update changelog for ${{ github.event.release.tag_name }}"
-            git push --set-upstream origin ${{ github.event.release.target_commitish }}
-          else
-            echo "No changelog changes to commit."
-          fi
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.RELEASE_WORKFLOW }}
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+      - name: Generate GitHub release notes
+        id: release_notes
+        uses: release-drafter/release-drafter@v6
         with:
-          hugo-version: 'latest'
+          version: ${{ github.event.inputs.version }}
+
+      - name: Write release notes to file
+        run: |
+          echo "${{ steps.release_notes.outputs.notes }}" > RELEASE_NOTES.md
+          git add RELEASE_NOTES.md
+          git commit -m "Add release notes for ${{ github.event.inputs.version }}"
+          git push origin main
+
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          draft: false
+          prerelease: false
+
+      - name: Install Hugo
+        uses: peaceiris/actions-hugo@v0.104.0
+        with:
+          hugo-version: '0.112.7'
 
       - name: Build Hugo site
-        run: hugo --source docs --destination public --minify
+        run: hugo --minify
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4.0.0
+      - name: Deploy Hugo to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          publish_branch: gh-pages
+          force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
