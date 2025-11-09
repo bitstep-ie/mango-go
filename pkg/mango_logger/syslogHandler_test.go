@@ -29,25 +29,6 @@ func (m *mockSyslogWriter) Close() error {
 	return m.closeErr
 }
 
-// mockSyslogNew replaces syslog.New in tests
-var mockSyslogNew = func(priority syslog.Priority, tag string) (*mockSyslogWriter, error) {
-	return &mockSyslogWriter{}, nil
-}
-
-// patchSyslogNew temporarily overrides syslog.New for testing
-func patchSyslogNew(mock func(syslog.Priority, string) (*mockSyslogWriter, error)) func() {
-	orig := syslogNew
-	syslogNew = func(p syslog.Priority, t string) (*syslog.Writer, error) {
-		_, err := mock(p, t)
-		if err != nil {
-			return nil, err
-		}
-		// fake *syslog.Writer for type compatibility
-		return (*syslog.Writer)(nil), nil
-	}
-	return func() { syslogNew = orig }
-}
-
 // overrideable function for syslog.New to make testing easier
 var syslogNew = func(p syslog.Priority, tag string) (*syslog.Writer, error) {
 	return syslog.New(p, tag)
