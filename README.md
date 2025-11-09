@@ -98,7 +98,7 @@ import "github.com/bitstep-ie/mango-go"
 - compare
 - env
 - io
-- mango_logger
+- logger
 - testutils
 - time
 
