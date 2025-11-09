@@ -15,8 +15,28 @@ jobs:
         run: |
           TAG_NAME="${{ github.event.release.tag_name }}"
           RELEASE_BODY="${{ github.event.release.body }}"
-          BODY=$(printf "%s" "$RELEASE_BODY" | sed 's/[&/\]/\\&/g')
-          sed -i "2i ## $TAG_NAME\n\n$BODY\n" docs/changelog.md
+          CHANGELOG_FILE="docs/changelog.md"
+      
+          # Ensure changelog exists with at least a heading
+          if [ ! -f "$CHANGELOG_FILE" ]; then
+            echo "# Changelog" > "$CHANGELOG_FILE"
+          fi
+      
+          if [ -z "$RELEASE_BODY" ]; then
+            RELEASE_BODY="No release notes provided."
+          fi
+      
+          # Split the heading and the rest of the changelog
+          HEADING=$(head -n 1 "$CHANGELOG_FILE")
+          REST=$(tail -n +2 "$CHANGELOG_FILE")
+      
+          # Prepend release notes after heading
+          {
+            echo "$HEADING"
+            echo "\n"
+            printf '## %s\n\n%s\n\n' "$TAG_NAME" "$RELEASE_BODY"
+            echo "$REST"
+          } > "$CHANGELOG_FILE"
 
       - name: Commit and push updated changelog
         run: |
