@@ -11,6 +11,7 @@ permissions:
   contents: write       # Allows creating tags and updating files
   pages: write          # Allows publishing Hugo docs
   id-token: write       # Required for some deploy actions
+  pull-requests: read
 
 jobs:
   release:
@@ -42,6 +43,8 @@ jobs:
         uses: release-drafter/release-drafter@v6
         with:
           version: ${{ github.event.inputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Write release notes to file
         run: |
@@ -49,6 +52,8 @@ jobs:
           git add RELEASE_NOTES.md
           git commit -m "Add release notes for ${{ github.event.inputs.version }}"
           git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
         uses: actions/create-release@v1
@@ -58,6 +63,7 @@ jobs:
           body: ${{ steps.release_notes.outputs.notes }}
           draft: false
           prerelease: false
+
 
       - name: Install Hugo
         uses: peaceiris/actions-hugo@v3
