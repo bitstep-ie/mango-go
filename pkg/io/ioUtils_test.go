@@ -1,16 +1,78 @@
 package io
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"github.com/bitstep-ie/mango-go/pkg/testutils"
 	"github.com/stretchr/testify/assert"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
 )
+
+// mockCloser simulates an io.Closer with a controllable error response
+type mockCloser struct {
+	closed bool
+	err    error
+}
+
+func (m *mockCloser) Close() error {
+	m.closed = true
+	return m.err
+}
+
+func TestSafeClose(t *testing.T) {
+	t.Run("closes a normal closer", func(t *testing.T) {
+		c := &mockCloser{}
+		SafeClose(c)
+		assert.True(t, c.closed, "expected Close to be called")
+	})
+
+	t.Run("handles nil without panic", func(t *testing.T) {
+		assert.NotPanics(t, func() {
+			SafeClose(nil)
+		}, "SafeClose(nil) should not panic")
+	})
+
+	t.Run("ignores error from closer", func(t *testing.T) {
+		c := &mockCloser{err: errors.New("boom")}
+		assert.NotPanics(t, func() {
+			SafeClose(c)
+		}, "SafeClose should ignore errors from Close")
+		assert.True(t, c.closed, "expected Close to be called even if it errors")
+	})
+}
+
+func TestSafeClosePrint(t *testing.T) {
+	t.Run("should close without error", func(t *testing.T) {
+		// capture log output
+		var buf bytes.Buffer
+		log.SetOutput(&buf)
+		defer log.SetOutput(io.Discard)
+
+		c := &mockCloser{err: nil}
+		SafeClosePrint(c)
+
+		assert.Empty(t, buf.String(), "expected no log output on successful close")
+	})
+
+	t.Run("should log error if close fails", func(t *testing.T) {
+		var buf bytes.Buffer
+		log.SetOutput(&buf)
+		defer log.SetOutput(io.Discard)
+
+		c := &mockCloser{err: errors.New("boom")}
+		SafeClosePrint(c)
+
+		logOutput := buf.String()
+		assert.Contains(t, logOutput, "close error: boom", "expected error to be logged")
+	})
+}
 
 func TestBackupFilesMatching(t *testing.T) {
 

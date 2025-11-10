@@ -4,6 +4,7 @@ package io
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,6 +18,23 @@ var (
 	createFunc = os.Create
 	copyFunc   = io.Copy
 )
+
+// SafeClose will close the closer safely
+func SafeClose(c io.Closer) {
+	if c != nil {
+		_ = c.Close()
+	}
+}
+
+// SafeClosePrint will close the closer safely
+// and print the error
+func SafeClosePrint(c io.Closer) {
+	if c != nil {
+		if err := c.Close(); err != nil {
+			log.Printf("close error: %v", err)
+		}
+	}
+}
 
 // DeleteFileWithExt will delete all the files from the dir with extensions in the list
 // extensions must be in the format .<ext> for matching
