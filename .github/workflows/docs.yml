@@ -41,10 +41,15 @@ jobs:
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           else
             echo "VERSION=${GITHUB_SHA::7}" >> $GITHUB_ENV
+            echo "DEV=1 >> $GITHUB_ENV"
           fi
       - name: Deploy new version with mike
         working-directory: documentation
         run: |
           # Deploy version
-          mike deploy $VERSION
-          mike set-default $VERSION
+          if [["${DEV}" == 1 ]]; then
+            mike deploy $VERSION development -u --push
+          else
+            mike deploy $VERSION latest -u --push
+          fi
+          mike set-default latest --allow-undefined --push
