@@ -34,18 +34,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Restore previous versions
-        working-directory: documentation
-        run: |
-          # Fetch gh-pages branch to retrieve previous .mike.yml
-          git fetch origin gh-pages:gh-pages-temp || true
-          if [ -f gh-pages-temp/.mike.yml ]; then
-            cp gh-pages-temp/.mike.yml .mike.yml
-            echo "Previous versions restored from remote gh-pages"
-          else
-            echo "No previous .mike.yml found; starting fresh"
-          fi
-
       - name: Determine version
         working-directory: documentation
         run: |
@@ -58,12 +46,5 @@ jobs:
         working-directory: documentation
         run: |
           # Deploy version
-          mike deploy $VERSION latest
-      - name: Publish to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
-          keep_files: true
+          mike deploy $VERSION
+          mike set-default $VERSION
