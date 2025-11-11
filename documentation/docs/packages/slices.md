@@ -1,4 +1,4 @@
-# mango-go · `pkg/slices`
+# `pkg/slices`
 
 Generic helpers for common slice patterns—membership, counting, chunking, reversing, and deduplication—without re-writing loops at every callsite.
 

@@ -5,7 +5,6 @@
  * Random package
  * slices package
  * time package
- * Documentation restructuring
  * Env helpers
  * Upgrade Dependencies
  * Windows fix for syslog write

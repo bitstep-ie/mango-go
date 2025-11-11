@@ -1,4 +1,4 @@
-# mango-go · `pkg/io`
+# `pkg/io`
 
 Small filesystem helpers for bulk operations (delete, backup, restore) based on file extensions. The package walks a
 directory tree, so you can prepare rollbacks or cleanups with a single call.

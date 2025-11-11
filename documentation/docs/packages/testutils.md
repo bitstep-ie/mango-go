@@ -1,4 +1,4 @@
-# mango-go · `pkg/testutils`
+# `pkg/testutils`
 
 Testing helpers that reduce boilerplate when working with temporary files and structured assertions.
 

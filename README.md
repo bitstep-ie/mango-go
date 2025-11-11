@@ -8,9 +8,9 @@
 <div align="center">
     <a href="https://github.com/bitstep-ie/mango-go">
     <picture>
-        <source srcset="images/mango-with-text-black.png" media="(prefers-color-scheme: light)">
-        <source srcset="images/mango-with-text-white.png" media="(prefers-color-scheme: dark)">
-        <img src="images/mango-with-text-black.png" alt="mango Logo">
+        <source srcset="documentation/docs/assets/mango-with-text-black.png" media="(prefers-color-scheme: light)">
+        <source srcset="documentation/docs/assets/mango-with-text-white.png" media="(prefers-color-scheme: dark)">
+        <img src="documentation/docs/assets/mango-with-text-black.png" alt="mango Logo">
     </picture>
     </a>
     <h3 align="center">mango-go</h3>
@@ -79,7 +79,7 @@
 
 - **Focused** – each folder solves a single problem (logging, env parsing, random data, etc.).
 - **Drop-in** – import paths live under `github.com/bitstep-ie/mango-go/pkg/...`.
-- **Well-documented** – every package ships with dedicated docs plus a [developer guide](docs/developer-guide.md) full of copy-paste examples.
+- **Well-documented** – every package ships with dedicated docs plus a [developer guide](documentation/docs/guide) full of copy-paste examples.
 - **CI-backed** – linted, tested, and mutation-tested in CI so helpers stay reliable.
 
 ## <a id="getting-started"></a>🚀 Getting started
@@ -108,16 +108,16 @@ import "github.com/bitstep-ie/mango-go"
 
 | Package | What it does | Docs |
 | --- | --- | --- |
-| `env` | read env vars with defaults or panic-on-missing helpers | [docs](docs/mango-go/packages/env.md) |
-| `io` | delete/backup/restore files by extension for safe inline edits | [docs](docs/mango-go/packages/io.md) |
-| `logger` | opinionated slog handler with CLI/file/syslog outputs | [docs](docs/mango-go/packages/logger) |
-| `random` | math/crypto random helpers for fixtures, passwords, timestamps | [docs](docs/mango-go/packages/random.md) |
-| `slices` | generic slice utilities (contains, chunk, unique, etc.) | [docs](docs/mango-go/packages/slices.md) |
-| `testutils` | test helpers for temp files and UUID/token assertions | [docs](docs/mango-go/packages/testutils.md) |
-| `time` | start/end-of-day helpers, duration parsing, “time ago” strings | [docs](docs/mango-go/packages/time.md) |
+| `env` | read env vars with defaults or panic-on-missing helpers | [docs](documentation/docs/packages/env.md) |
+| `io` | delete/backup/restore files by extension for safe inline edits | [docs](documentation/docs/packages/io.md) |
+| `logger` | opinionated slog handler with CLI/file/syslog outputs | [docs](documentation/docs/packages/logger) |
+| `random` | math/crypto random helpers for fixtures, passwords, timestamps | [docs](documentation/docs/packages/random.md) |
+| `slices` | generic slice utilities (contains, chunk, unique, etc.) | [docs](documentation/docs/packages/slices.md) |
+| `testutils` | test helpers for temp files and UUID/token assertions | [docs](documentation/docs/packages/testutils.md) |
+| `time` | start/end-of-day helpers, duration parsing, “time ago” strings | [docs](documentation/docs/packages/time.md) |
 
 Looking for a tour that stitches these together?  
-👉 [Developer Guide](docs/developer-guide.md)
+👉 [Developer Guide](documentation/docs/guide)
 
 ### 🔁 Quick start
 
@@ -168,7 +168,7 @@ Run the snippet to see CLI-friendly output plus structured JSON (when file loggi
 ### <a id="developer-guide"></a>🧑‍💻 Developer Guide
 
 Looking for end-to-end examples that combine logging, environment loading, random data generation, time helpers, and more?  
-👉 Jump into [docs/developer-guide.md](docs/developer-guide.md).
+👉 Jump into [documentation/docs/guide.md](documentation/docs/guide).
 
 ## <a id="usage"></a>👨‍💻 Usage
 

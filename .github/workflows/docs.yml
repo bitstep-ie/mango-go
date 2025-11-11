@@ -1,0 +1,49 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install docs dependencies
+        working-directory: documentation
+        run: pip install -r requirements.txt
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy versioned docs
+        working-directory: documentation
+        run: |
+          VERSION=""
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            echo "Deploying version: ${VERSION}"
+            mike deploy --push --update-aliases ${VERSION} latest --config-file mkdocs.yml
+            mike set-default latest --push --config-file mkdocs.yml
+          elif [[ "${GITHUB_REF}" == refs/heads/main ]]; then
+            echo "Deploying latest from main"
+            mike deploy --push --update-aliases latest --config-file mkdocs.yml
+          fi

@@ -1,4 +1,4 @@
-# mango-go · `pkg/logger`
+# `pkg/logger`
 
 A structured logging handler built on top of `log/slog`. It fans each record out to CLI, rotating files (via `lumberjack`), and syslog simultaneously, while enforcing context contracts such as `type`, `application`, and `operation`.
 

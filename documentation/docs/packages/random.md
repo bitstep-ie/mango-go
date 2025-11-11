@@ -1,4 +1,4 @@
-# mango-go · `pkg/random`
+# `pkg/random`
 
 Convenience helpers for building fixtures, tokens, and fuzz data. Functions span deterministic math/rand utilities and crypto-safe password generation.
 

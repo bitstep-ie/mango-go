@@ -1,15 +1,4 @@
-# Mango-Go Developer Guide
-
-<div align="center">
-    <a href="https://github.com/bitstep-ie/mango-go">
-    <picture>
-        <source srcset="../images/mango-with-text-black.png" media="(prefers-color-scheme: light)">
-        <source srcset="../images/mango-with-text-white.png" media="(prefers-color-scheme: dark)">
-        <img src="../images/mango-with-text-black.png" alt="mango Logo">
-    </picture>
-    </a>
-</div>
-
+# Usage Guide
 This guide walks you through configuring a Go project that consumes the `github.com/bitstep-ie/mango-go/pkg/...` packages. It covers end-to-end setup plus focused examples for each utility package so you can copy, paste, and start shipping features quickly.
 
 ---

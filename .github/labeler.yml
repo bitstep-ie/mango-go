@@ -1,7 +1,7 @@
 # 'documentation' label to any changes within 'docs' folder or any subfolders
 documentation:
   - changed-files:
-      - any-glob-to-any-file: docs/**
+      - any-glob-to-any-file: documentation/**
 
 # 'feature' label to any changes within 'pkg' folder or any subfolders
 feature:

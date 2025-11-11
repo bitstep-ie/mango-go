@@ -1,0 +1,64 @@
+site_name: "mango-go"
+site_description: Utilities and helpers for Go developers, powered by Mango
+site_url: https://bitstep-ie.github.io/mango-go/
+repo_url: https://github.com/bitstep-ie/mango-go
+repo_name: bitstep-ie/mango-go
+docs_dir: ./docs
+
+
+theme:
+  name: material
+  logo: assets/mango-black.png
+  features:
+    - navigation.top
+    - navigation.tabs
+    - navigation.instant
+    - content.code.annotate
+    - content.tabs.link
+  palette:
+    - scheme: default
+      primary: orange
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+      code: github           # light mode code block style
+    - scheme: slate
+      primary: orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+      code: monokai
+
+extra:
+  favicon: assets/favicon.ico
+  version:
+    provider: mike
+
+nav:
+  - Guide: guide.md
+  - Packages:
+      - env: packages/env.md
+      - io: packages/io.md
+      - logger: packages/logger.md
+      - random: packages/random.md
+      - slices: packages/slices.md
+      - testutils: packages/testutils.md
+      - time: packages/time.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      guess_lang: false
+      linenums: true
+  - tables
+  - footnotes
+  - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption

@@ -1,4 +1,4 @@
-# mango-go · `pkg/env`
+# `pkg/env`
 
 Helpers for reading configuration from environment variables with sensible defaults and explicit “must” variants that panic when a value is missing or malformed.
 

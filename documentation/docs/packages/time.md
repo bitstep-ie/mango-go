@@ -1,4 +1,4 @@
-# mango-go · `pkg/time`
+# `pkg/time`
 
 Utility functions for common calendaring tasks (start/end-of-day boundaries, relative checks), human-friendly “time ago” formatting, and extended duration parsing.
 
