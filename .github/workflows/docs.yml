@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -41,14 +41,16 @@ jobs:
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           else
             echo "VERSION=${GITHUB_SHA::7}" >> $GITHUB_ENV
-            echo "DEV=1 >> $GITHUB_ENV"
+            echo "PREV_VERSION=$(git rev-parse HEAD^)" >> $GITHUB_ENV
+            echo "DEV=1" >> $GITHUB_ENV"
           fi
       - name: Deploy new version with mike
         working-directory: documentation
         run: |
           # Deploy version
-          if [["${DEV}" == 1 ]]; then
+          if [[ "${DEV}" == 1 ]]; then
             mike deploy $VERSION development -u --push
+            mike delete $PREV_VERSION
           else
             mike deploy $VERSION latest -u --push
           fi
