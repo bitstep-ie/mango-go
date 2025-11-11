@@ -58,8 +58,13 @@ jobs:
       - name: Deploy new version with mike
         working-directory: documentation
         run: |
-          # Rebuild all previous versions + new one
-          mike deploy $VERSION latest --update-aliases --config-file mkdocs.yml --force
+          # Delete previous 'latest' alias if redeploying main
+          if [[ "$VERSION" == "latest" ]] && mike list | grep -q "^latest$"; then
+            mike delete latest --yes --config-file mkdocs.yml
+          fi
+          
+          # Deploy version
+          mike deploy $VERSION latest --update-aliases --config-file mkdocs.yml
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
