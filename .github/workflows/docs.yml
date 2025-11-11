@@ -60,7 +60,7 @@ jobs:
         run: |
           # Delete previous 'latest' alias if redeploying main
           if [[ "$VERSION" == "latest" ]] && mike list | grep -q "^latest$"; then
-            mike delete latest --yes --config-file mkdocs.yml
+            mike delete latest --config-file mkdocs.yml
           fi
           
           # Deploy version
