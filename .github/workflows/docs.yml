@@ -54,18 +54,16 @@ jobs:
           else
             echo "VERSION=${GITHUB_SHA::7}" >> $GITHUB_ENV
           fi
-
       - name: Deploy new version with mike
         working-directory: documentation
         run: |
           # Deploy version
-          mike deploy $VERSION
-
+          mike deploy $VERSION latest
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: documentation/site
+          publish_dir: ./
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
           keep_files: true
