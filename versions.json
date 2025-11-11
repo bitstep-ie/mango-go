@@ -10,5 +10,12 @@
     "version": "63fbf49",
     "title": "63fbf49",
     "aliases": []
+  },
+  {
+    "version": "v0.1.0",
+    "title": "v0.1.0",
+    "aliases": [
+      "latest"
+    ]
   }
 ]
