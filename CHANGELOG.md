@@ -3,11 +3,9 @@
 
 # v0.1.0
 
-## 📖 Documentation
+## 🚀 Features
 
 - io.SafeClose \& io.SafeClosePrint (#8) by @MadaManu
-- Small documentation updates and logger package rename (#7) by @MadaManu
-- Feature/Dev Guide (#1) by @johnjoeallen
 - Random package
 - Slices package
 - time package
@@ -19,6 +17,12 @@
 - io & test utils
 - Logger & assertValidUUID addition
 - Initial compare pkg - EqualsIgnoreOrder
+
+## 📖 Documentation
+
+- Feature/Dev Guide (#1) by @johnjoeallen
+- Small documentation updates and logger package rename (#7) by @MadaManu
+
 
 ## 🚧 Maintenance
 
