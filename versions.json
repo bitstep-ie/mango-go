@@ -2,9 +2,7 @@
   {
     "version": "feb7994",
     "title": "feb7994",
-    "aliases": [
-      "development"
-    ]
+    "aliases": []
   },
   {
     "version": "fa80bca",
@@ -15,6 +13,13 @@
     "version": "f08eb50",
     "title": "f08eb50",
     "aliases": []
+  },
+  {
+    "version": "e85e0a7",
+    "title": "e85e0a7",
+    "aliases": [
+      "development"
+    ]
   },
   {
     "version": "63fbf49",
