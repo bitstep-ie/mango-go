@@ -16,4 +16,4 @@ config:
 # 'legal' Label for these type of files
 legal:
   - changed-files:
-      - any-glob-to-any-file: ["LICENSE*", "NOTICES*", "CODE_OF_CONDUCT*", "CONTRIBUTING*"]
+      - any-glob-to-any-file: ["LICENSE*", "NOTICES*", "CODE_OF_CONDUCT*", "CONTRIBUTING*", "SECURITY*"]
