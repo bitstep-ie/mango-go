@@ -22,14 +22,19 @@
   {
     "version": "a25dc65",
     "title": "a25dc65",
-    "aliases": [
-      "development"
-    ]
+    "aliases": []
   },
   {
     "version": "63fbf49",
     "title": "63fbf49",
     "aliases": []
+  },
+  {
+    "version": "9f74232",
+    "title": "9f74232",
+    "aliases": [
+      "development"
+    ]
   },
   {
     "version": "v0.1.0",
