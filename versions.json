@@ -25,6 +25,13 @@
     "aliases": []
   },
   {
+    "version": "a5f2466",
+    "title": "a5f2466",
+    "aliases": [
+      "development"
+    ]
+  },
+  {
     "version": "63fbf49",
     "title": "63fbf49",
     "aliases": []
@@ -32,9 +39,7 @@
   {
     "version": "9f74232",
     "title": "9f74232",
-    "aliases": [
-      "development"
-    ]
+    "aliases": []
   },
   {
     "version": "v0.1.0",
