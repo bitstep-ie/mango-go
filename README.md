@@ -17,10 +17,10 @@
     <p align="center">
         A collection of utility packages for go
         <br />
-        <a href="#"><strong>📚 Explore the docs »</strong></a>
+        <a href="https://bitstep-ie.github.io/mango-go/latest/"><strong>📚 Explore the docs »</strong></a>
         <br />
         <br />
-        <a href="#">🔎 View Examples</a>
+        <a href="https://bitstep-ie.github.io/mango-go/latest/packages/env/">🔎 View Examples</a>
         &middot;
         <a href="https://github.com/bitstep-ie/mango-go/issues/new?labels=bug&template=bug-report---.md">
             🐛 Report Bug
@@ -71,8 +71,6 @@
   </ol>
 </details>
 
-
-
 ## <a id="about-the-project"></a>📋 About the project
 
 `mango-go` is a grab-bag of small, dependency-light utilities we found ourselves rewriting across services. Every package is:
@@ -104,7 +102,7 @@ With [Go's module support](https://go.dev/wiki/Modules#how-to-use-modules), simp
 import "github.com/bitstep-ie/mango-go"
 ```
 
-### <a id="packages"></a>📦 Packages 
+### <a id="packages"></a>📦 Packages
 
 | Package | What it does | Docs |
 | --- | --- | --- |
@@ -164,7 +162,6 @@ func main() {
 
 Run the snippet to see CLI-friendly output plus structured JSON (when file logging is enabled).
 
-
 ### <a id="developer-guide"></a>🧑‍💻 Developer Guide
 
 Looking for end-to-end examples that combine logging, environment loading, random data generation, time helpers, and more?  
@@ -201,7 +198,6 @@ func demo() {
 
 Check each package doc (table above) for deeper walkthroughs and additional helpers.
 
-
 ## <a id="contributing"></a>📝 Contributing
 
 We welcome and appreciate your contributions!
@@ -214,23 +210,18 @@ We welcome and appreciate your contributions!
 - 🔧 Submit code - Fix bugs or implement new features
 - 🧪 Write tests - Improve our test coverage
 
-
 ### <a id="getting-started-with-contributing"></a>✨ Getting started with contributing
 
 - Check out our [contributing.md](CONTRIBUTING) for detailed guidelines
 - Join our community discussions and ask questions
 
-
 **All contributions are valued and help make mango better for everyone!**
-
 
 ## <a id="license"></a>📜 License
 
 ![image](https://img.shields.io/badge/Apache--2.0-green?style=for-the-badge)
 
 ## <a id="acknowledgments"></a>👏 Acknowledgments
-
-
 
 ### <a id="contributors"></a>🤝 Contributors
 
@@ -246,5 +237,3 @@ We welcome and appreciate your contributions!
     <td align="center"><a href="https://github.com/bencarroll1"><img src="https://github.com/bencarroll1.png?size=100" width="100px;" alt="Ben"/><br /><sub><b>Ben</b></sub></a></td>
   </tr>
 </table>
-
-
