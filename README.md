@@ -22,11 +22,11 @@
         <br />
         <a href="https://bitstep-ie.github.io/mango-go/latest/packages/env/">🔎 View Examples</a>
         &middot;
-        <a href="https://github.com/bitstep-ie/mango-go/issues/new?labels=bug&template=bug-report---.md">
+        <a href="https://github.com/bitstep-ie/mango-go/issues/new?template=bug-report.md&labels=bug">
             🐛 Report Bug
         </a>
         &middot;
-        <a href="https://github.com/bitstep-ie/mango-go/issues/new?labels=enhancement&template=feature-request---.md">
+        <a href="https://github.com/bitstep-ie/mango-go/issues/new?template=feature_request.md&labels=enhancement">
             💡 Request Feature
         </a>
     </p>
