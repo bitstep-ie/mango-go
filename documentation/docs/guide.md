@@ -17,6 +17,7 @@ import (
     mangoenv "github.com/bitstep-ie/mango-go/pkg/env"
     mangoio "github.com/bitstep-ie/mango-go/pkg/io"
     mangolog "github.com/bitstep-ie/mango-go/pkg/logger"
+    mangonet "github.com/bitstep-ie/mango-go/pkg/net"
     mangorand "github.com/bitstep-ie/mango-go/pkg/random"
     mangoslices "github.com/bitstep-ie/mango-go/pkg/slices"
     mangotime "github.com/bitstep-ie/mango-go/pkg/time"
@@ -122,7 +123,27 @@ func Load() Config {
 
 ---
 
-## 4. File Maintenance Helpers (`pkg/io`)
+## 4. Network Helpers (`pkg/net`)
+
+Use `pkg/net` when inputs may carry IP literals (allow-lists, headers, webhook payloads, or config fields) and you need quick syntactic checks.
+
+```go
+package validate
+
+import mangonet "github.com/bitstep-ie/mango-go/pkg/net"
+
+func IsAllowedIP(ip string) bool {
+    return mangonet.IsValidIPv4(ip) || mangonet.IsValidIPv6(ip)
+}
+```
+
+- `IsValidIPv4` accepts only valid IPv4 addresses.
+- `IsValidIPv6` accepts only valid IPv6 addresses (including IPv4-mapped forms like `::ffff:192.168.1.1`).
+- Both helpers are format checks only; they do not verify DNS/host reachability.
+
+---
+
+## 5. File Maintenance Helpers (`pkg/io`)
 
 ```go
 package backup
@@ -144,7 +165,7 @@ func RotateConfigs(dir string) error {
 
 ---
 
-## 5. Random Data Recipes (`pkg/random`)
+## 6. Random Data Recipes (`pkg/random`)
 
 ```go
 package demo
@@ -178,7 +199,7 @@ The package mixes math/rand conveniences with crypto-safe building blocks (`Byte
 
 ---
 
-## 6. Slice Utilities
+## 7. Slice Utilities
 
 ```go
 events := []string{"created", "updated", "deleted", "deleted"}
@@ -202,7 +223,7 @@ Generics keep these helpers type-safe and allocation-friendly. `Chunk` panics wh
 
 ---
 
-## 7. Working with Time
+## 8. Working with Time
 
 ```go
 now := time.Now()
@@ -223,7 +244,7 @@ fmt.Println(mangotime.TimeAgo(time.Now().Add(-90 * time.Minute))) // "1 hour ago
 
 ---
 
-## 8. Test Utilities
+## 9. Test Utilities
 
 ```go
 func TestProcessor(t *testing.T) {
@@ -244,7 +265,7 @@ func TestProcessor(t *testing.T) {
 
 ---
 
-## 9. Putting It All Together
+## 10. Putting It All Together
 
 Here’s a minimal HTTP handler showcasing multiple packages:
 
@@ -267,6 +288,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     ctx = context.WithValue(ctx, mangolog.OPERATION, "invoice-create")
     ctx = context.WithValue(ctx, mangolog.TYPE, mangolog.BusinessType)
 
+    clientIP := r.Header.Get("X-Forwarded-For")
+    if clientIP != "" && !mangonet.IsValidIPv4(clientIP) && !mangonet.IsValidIPv6(clientIP) {
+        s.logger.WarnContext(ctx, "invalid client ip header", slog.String("clientIP", clientIP))
+    }
+
     reqID := r.Header.Get("X-Request-ID")
     if reqID == "" {
         reqID = mangorand.String(12)
@@ -287,7 +313,7 @@ This pattern scales: standardize context values at the edge, use Mango Logger fo
 
 ---
 
-## 10. Next Steps
+## 11. Next Steps
 
 1. Browse `docs/mango-go/packages/*.md` for deeper API details.
 2. Wire these helpers into your project’s scaffolding (CLI, HTTP server, worker, etc.).
