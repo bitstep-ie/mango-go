@@ -42,6 +42,7 @@ nav:
       - env: packages/env.md
       - io: packages/io.md
       - logger: packages/logger.md
+      - net: packages/net.md
       - random: packages/random.md
       - slices: packages/slices.md
       - testutils: packages/testutils.md
