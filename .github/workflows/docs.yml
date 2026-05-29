@@ -49,7 +49,7 @@ jobs:
           VERSION=${GITHUB_SHA::7}
           PREV_VERSION=$(git rev-parse --short HEAD^)
           mike deploy $VERSION development -u --push
-          mike delete $PREV_VERSION || true            
+          mike delete $PREV_VERSION         
 
       - name: Default latest
         working-directory: documentation
