@@ -46,10 +46,7 @@ jobs:
         working-directory: documentation
         if: ${{ !github.event.release || github.event.release.tag_name == '' }}
         run: |
-          VERSION=${GITHUB_SHA::7}
-          PREV_VERSION=$(git rev-parse --short HEAD^)
-          mike deploy $VERSION development -u --push
-          mike delete $PREV_VERSION         
+          mike deploy dev dev -u --push         
 
       - name: Default latest
         working-directory: documentation
