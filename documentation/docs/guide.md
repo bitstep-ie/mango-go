@@ -135,11 +135,16 @@ import mangonet "github.com/bitstep-ie/mango-go/pkg/net"
 func IsAllowedIP(ip string) bool {
     return mangonet.IsValidIP(ip)
 }
+
+func IsValidWebhookURL(url string) bool {
+    return mangonet.IsValidURL(url)
+}
 ```
 
 - `IsValidIP` accepts both IPv4 and IPv6.
 - `IsValidIPv4` accepts only valid IPv4 addresses.
 - `IsValidIPv6` accepts only valid IPv6 addresses (including IPv4-mapped forms like `::ffff:192.168.1.1`).
+- `IsValidURL` accepts URLs with a required scheme and host, rejecting permissive edge cases.
 - Both helpers are format checks only; they do not verify DNS/host reachability.
 
 ---

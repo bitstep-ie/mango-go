@@ -88,3 +88,39 @@ func TestIsValidIP(t *testing.T) {
 		})
 	}
 }
+
+func TestIsValidURL(t *testing.T) {
+	tests := []struct {
+		name  string
+		value string
+		want  bool
+	}{
+		// Valid URLs
+		{name: "valid http url", value: "http://example.com", want: true},
+		{name: "valid https url", value: "https://example.com", want: true},
+		{name: "valid url with path", value: "https://example.com/path/to/resource", want: true},
+		{name: "valid url with query", value: "https://example.com?key=value", want: true},
+		{name: "valid url with fragment", value: "https://example.com#section", want: true},
+		{name: "valid url with port", value: "https://example.com:8080", want: true},
+		{name: "valid url with user info", value: "https://user:pass@example.com", want: true},
+		{name: "valid ftp url", value: "ftp://files.example.com", want: true},
+		{name: "valid url with subdomain", value: "https://api.v2.example.com/v1/users", want: true},
+		{name: "valid localhost", value: "http://localhost:3000", want: true},
+		{name: "valid ip url", value: "http://192.168.1.1:8080", want: true},
+		{name: "valid trailing slash", value: "https://example.com/", want: true},
+		// Invalid URLs
+		{name: "empty string", value: "", want: false},
+		{name: "no scheme", value: "example.com", want: false},
+		{name: "scheme only", value: "https://", want: false},
+		{name: "host only", value: "example.com", want: false},
+		{name: "whitespace in url", value: "https://exam ple.com", want: false},
+		{name: "invalid scheme format", value: "ht!tp://example.com", want: false},
+		{name: "malformed url", value: "://example.com", want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, IsValidURL(tt.value))
+		})
+	}
+}
