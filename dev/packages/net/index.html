@@ -626,6 +626,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#accept-valid-urls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accept valid URLs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reject-invalid-urls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reject invalid URLs
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -639,6 +661,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Behavior Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ip-validation-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IP Validation Specifics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#url-validation-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URL Validation Specifics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -885,6 +935,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#accept-valid-urls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accept valid URLs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reject-invalid-urls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reject invalid URLs
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -898,6 +970,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Behavior Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ip-validation-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IP Validation Specifics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#url-validation-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URL Validation Specifics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -955,6 +1055,10 @@
 <td><code>IsValidIPv6(value string) bool</code></td>
 <td>returns <code>true</code> only for syntactically valid IPv6 addresses</td>
 </tr>
+<tr>
+<td><code>IsValidURL(value string) bool</code></td>
+<td>returns <code>true</code> only for syntactically valid URLs with scheme and host</td>
+</tr>
 </tbody>
 </table>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
@@ -999,11 +1103,38 @@
 <a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidIPv6</span><span class="p">(</span><span class="s">&quot;2001:db8:1:2:3:4:5:6:7&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// false (too many groups)</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidIPv6</span><span class="p">(</span><span class="s">&quot; 2001:db8::1 &quot;</span><span class="p">)</span><span class="w">      </span><span class="c1">// false (whitespace)</span>
 </code></pre></div></td></tr></table></div>
+<h3 id="accept-valid-urls">Accept valid URLs<a class="headerlink" href="#accept-valid-urls" title="Permanent link">&para;</a></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;http://example.com&quot;</span><span class="p">)</span><span class="w">              </span><span class="c1">// true</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;https://api.example.com/v1/users&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;https://example.com:8080/path?key=value&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;ftp://files.example.com&quot;</span><span class="p">)</span><span class="w">         </span><span class="c1">// true</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="reject-invalid-urls">Reject invalid URLs<a class="headerlink" href="#reject-invalid-urls" title="Permanent link">&para;</a></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;example.com&quot;</span><span class="p">)</span><span class="w">          </span><span class="c1">// false (no scheme)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;https://&quot;</span><span class="p">)</span><span class="w">             </span><span class="c1">// false (no host)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w">                     </span><span class="c1">// false (empty)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="s">&quot;not a url&quot;</span><span class="p">)</span><span class="w">            </span><span class="c1">// false (invalid format)</span>
+</code></pre></div></td></tr></table></div>
 <h2 id="behavior-notes">Behavior Notes<a class="headerlink" href="#behavior-notes" title="Permanent link">&para;</a></h2>
+<h3 id="ip-validation-specifics">IP Validation Specifics<a class="headerlink" href="#ip-validation-specifics" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Validation is syntactic only; it does not check host reachability.</li>
 <li>Reserved/private/public ranges are all treated as valid if the address format is correct.</li>
 <li>The helper does not trim input. Normalize user input before validation if needed.</li>
+</ul>
+<h3 id="url-validation-specifics">URL Validation Specifics<a class="headerlink" href="#url-validation-specifics" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>IsValidURL</code> requires both a <strong>scheme</strong> (http, https, ftp, etc.) and a <strong>host</strong> to be present.</li>
+<li>This is stricter than <code>net.ParseURL</code>, rejecting permissive edge cases like scheme-only or host-only strings.</li>
+<li>Supports any valid scheme (http, https, ftp, ws, custom protocols, etc.).</li>
+<li>Accepts URLs with ports, paths, query strings, fragments, and user info.</li>
+<li>Does not validate the scheme against a whitelist; any non-empty valid scheme is accepted (use additional logic if you need to restrict schemes).</li>
 </ul>
 
 

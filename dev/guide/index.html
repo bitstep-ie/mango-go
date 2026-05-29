@@ -1134,24 +1134,33 @@
 <hr />
 <h2 id="4-network-helpers-pkgnet">4. Network Helpers (<code>pkg/net</code>)<a class="headerlink" href="#4-network-helpers-pkgnet" title="Permanent link">&para;</a></h2>
 <p>Use <code>pkg/net</code> when inputs may carry IP literals (allow-lists, headers, webhook payloads, or config fields) and you need quick syntactic checks.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span>
-<span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span>
-<span class="normal"><a href="#__codelineno-4-6">6</a></span>
-<span class="normal"><a href="#__codelineno-4-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">validate</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">validate</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kn">import</span><span class="w"> </span><span class="nx">mangonet</span><span class="w"> </span><span class="s">&quot;github.com/bitstep-ie/mango-go/pkg/net&quot;</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a>
 <a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="kd">func</span><span class="w"> </span><span class="nx">IsAllowedIP</span><span class="p">(</span><span class="nx">ip</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidIP</span><span class="p">(</span><span class="nx">ip</span><span class="p">)</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="kd">func</span><span class="w"> </span><span class="nx">IsValidWebhookURL</span><span class="p">(</span><span class="nx">url</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">mangonet</span><span class="p">.</span><span class="nx">IsValidURL</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><code>IsValidIP</code> accepts both IPv4 and IPv6.</li>
 <li><code>IsValidIPv4</code> accepts only valid IPv4 addresses.</li>
 <li><code>IsValidIPv6</code> accepts only valid IPv6 addresses (including IPv4-mapped forms like <code>::ffff:192.168.1.1</code>).</li>
+<li><code>IsValidURL</code> accepts URLs with a required scheme and host, rejecting permissive edge cases.</li>
 <li>Both helpers are format checks only; they do not verify DNS/host reachability.</li>
 </ul>
 <hr />
