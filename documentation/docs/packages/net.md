@@ -19,6 +19,7 @@ func allowHosts(ipv4 string, ipv6 string) bool {
 | `IsValidIP(value string) bool` | returns `true` only for syntactically valid IPv4 or IPv6 addresses |
 | `IsValidIPv4(value string) bool` | returns `true` only for syntactically valid IPv4 addresses |
 | `IsValidIPv6(value string) bool` | returns `true` only for syntactically valid IPv6 addresses |
+| `IsValidURL(value string) bool` | returns `true` only for syntactically valid URLs with scheme and host |
 
 ## Examples
 
@@ -65,8 +66,35 @@ mangonet.IsValidIPv6("2001:db8:1:2:3:4:5:6:7") // false (too many groups)
 mangonet.IsValidIPv6(" 2001:db8::1 ")      // false (whitespace)
 ```
 
+### Accept valid URLs
+
+```go
+mangonet.IsValidURL("http://example.com")              // true
+mangonet.IsValidURL("https://api.example.com/v1/users") // true
+mangonet.IsValidURL("https://example.com:8080/path?key=value") // true
+mangonet.IsValidURL("ftp://files.example.com")         // true
+```
+
+### Reject invalid URLs
+
+```go
+mangonet.IsValidURL("example.com")          // false (no scheme)
+mangonet.IsValidURL("https://")             // false (no host)
+mangonet.IsValidURL("")                     // false (empty)
+mangonet.IsValidURL("not a url")            // false (invalid format)
+```
+
 ## Behavior Notes
 
 - Validation is syntactic only; it does not check host reachability.
 - Reserved/private/public ranges are all treated as valid if the address format is correct.
 - The helper does not trim input. Normalize user input before validation if needed.
+
+### URL Validation Specifics
+
+- `IsValidURL` requires both a **scheme** (http, https, ftp, etc.) and a **host** to be present.
+- This is stricter than `net.ParseURL`, rejecting permissive edge cases like scheme-only or host-only strings.
+- Supports any valid scheme (http, https, ftp, ws, custom protocols, etc.).
+- Accepts URLs with ports, paths, query strings, fragments, and user info.
+- Does not validate the scheme against a whitelist; any non-empty valid scheme is accepted (use additional logic if you need to restrict schemes).
+
