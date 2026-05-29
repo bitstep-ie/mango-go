@@ -138,6 +138,7 @@ jobs:
     needs: [build]
     name: Unleash Gremlins
     runs-on: ubuntu-latest
+    timeout-minutes: 5  # Added longer timeout for gremlins to run
     env:
       GO111MODULE: on
       GOPROXY: https://proxy.golang.org

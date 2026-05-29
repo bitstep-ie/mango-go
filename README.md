@@ -73,11 +73,13 @@
 
 ## <a id="about-the-project"></a>📋 About the project
 
-`mango-go` is a grab-bag of small, dependency-light utilities we found ourselves rewriting across services. Every package is:
+`mango-go` is a grab-bag of small, dependency-light utilities we found ourselves rewriting across services. Every
+package is:
 
 - **Focused** – each folder solves a single problem (logging, env parsing, random data, etc.).
 - **Drop-in** – import paths live under `github.com/bitstep-ie/mango-go/pkg/...`.
-- **Well-documented** – every package ships with dedicated docs plus a [developer guide](documentation/docs/guide) full of copy-paste examples.
+- **Well-documented** – every package ships with dedicated docs plus a [developer guide](documentation/docs/guide) full
+  of copy-paste examples.
 - **CI-backed** – linted, tested, and mutation-tested in CI so helpers stay reliable.
 
 ## <a id="getting-started"></a>🚀 Getting started
@@ -86,7 +88,8 @@ All you need to start using mango-go
 
 ### <a id="prerequisites"></a>📘️ Prerequisites
 
-- **Go version**: mango-go requires [Go](https://go.dev/) version [1.24](https://go.dev/doc/devel/release#go1.24.0) or above
+- **Go version**: mango-go requires [Go](https://go.dev/) version [1.24](https://go.dev/doc/devel/release#go1.24.0) or
+  above
 - **Basic Go knowledge**: Familiarity with Go syntax and package management is helpful
 
 ### <a id="installation"></a>🛠️ Installation
@@ -96,7 +99,8 @@ go get github.com/bitstep-ie/mango-go@latest
 ```
 
 Modules are versioned, so you can pin a specific tag in `go.mod` if required.
-With [Go's module support](https://go.dev/wiki/Modules#how-to-use-modules), simply import mango-go in your code and Go will automatically fetch it during build:
+With [Go's module support](https://go.dev/wiki/Modules#how-to-use-modules), simply import mango-go in your code and Go
+will automatically fetch it during build:
 
 ```go
 import "github.com/bitstep-ie/mango-go"
@@ -104,15 +108,16 @@ import "github.com/bitstep-ie/mango-go"
 
 ### <a id="packages"></a>📦 Packages
 
-| Package | What it does | Docs |
-| --- | --- | --- |
-| `env` | read env vars with defaults or panic-on-missing helpers | [docs](documentation/docs/packages/env.md) |
-| `io` | delete/backup/restore files by extension for safe inline edits | [docs](documentation/docs/packages/io.md) |
-| `logger` | opinionated slog handler with CLI/file/syslog outputs | [docs](documentation/docs/packages/logger) |
-| `random` | math/crypto random helpers for fixtures, passwords, timestamps | [docs](documentation/docs/packages/random.md) |
-| `slices` | generic slice utilities (contains, chunk, unique, etc.) | [docs](documentation/docs/packages/slices.md) |
-| `testutils` | test helpers for temp files and UUID/token assertions | [docs](documentation/docs/packages/testutils.md) |
-| `time` | start/end-of-day helpers, duration parsing, “time ago” strings | [docs](documentation/docs/packages/time.md) |
+| Package     | What it does                                                   | Docs                                             |
+|-------------|----------------------------------------------------------------|--------------------------------------------------|
+| `env`       | read env vars with defaults or panic-on-missing helpers        | [docs](documentation/docs/packages/env.md)       |
+| `io`        | delete/backup/restore files by extension for safe inline edits | [docs](documentation/docs/packages/io.md)        |
+| `logger`    | opinionated slog handler with CLI/file/syslog outputs          | [docs](documentation/docs/packages/logger)       |
+| `net`       | network helpers                                                | [docs](documentation/docs/packages/net.md)       |
+| `random`    | math/crypto random helpers for fixtures, passwords, timestamps | [docs](documentation/docs/packages/random.md)    |
+| `slices`    | generic slice utilities (contains, chunk, unique, etc.)        | [docs](documentation/docs/packages/slices.md)    |
+| `testutils` | test helpers for temp files and UUID/token assertions          | [docs](documentation/docs/packages/testutils.md) |
+| `time`      | start/end-of-day helpers, duration parsing, “time ago” strings | [docs](documentation/docs/packages/time.md)      |
 
 Looking for a tour that stitches these together?  
 👉 [Developer Guide](documentation/docs/guide)
@@ -123,40 +128,40 @@ Looking for a tour that stitches these together?
 package main
 
 import (
-    "context"
-    "log/slog"
-    "time"
-    mangoenv "github.com/bitstep-ie/mango-go/pkg/env"
-    mangolog "github.com/bitstep-ie/mango-go/pkg/logger"
-    mangotime "github.com/bitstep-ie/mango-go/pkg/time"
+	"context"
+	"log/slog"
+	"time"
+	mangoenv "github.com/bitstep-ie/mango-go/pkg/env"
+	mangolog "github.com/bitstep-ie/mango-go/pkg/logger"
+	mangotime "github.com/bitstep-ie/mango-go/pkg/time"
 )
 
 func main() {
-    cfg := &mangolog.LogConfig{
-        MangoConfig: &mangolog.MangoConfig{
-            Strict: true,
-            CorrelationId: &mangolog.CorrelationIdConfig{AutoGenerate: true},
-        },
-        Out: &mangolog.OutConfig{
-            Enabled: true,
-            Cli:   &mangolog.CliConfig{Enabled: true, Friendly: true, Verbose: true},
-            File:  &mangolog.FileOutputConfig{Enabled: false},
-        },
-    }
+	cfg := &mangolog.LogConfig{
+		MangoConfig: &mangolog.MangoConfig{
+			Strict:        true,
+			CorrelationId: &mangolog.CorrelationIdConfig{AutoGenerate: true},
+		},
+		Out: &mangolog.OutConfig{
+			Enabled: true,
+			Cli:     &mangolog.CliConfig{Enabled: true, Friendly: true, Verbose: true},
+			File:    &mangolog.FileOutputConfig{Enabled: false},
+		},
+	}
 
-    logger := slog.New(mangolog.NewMangoLogger(cfg))
-    ctx := context.Background()
-    ctx = context.WithValue(ctx, mangolog.APPLICATION, "billing-api")
-    ctx = context.WithValue(ctx, mangolog.OPERATION, "invoice-create")
-    ctx = context.WithValue(ctx, mangolog.TYPE, mangolog.BusinessType)
+	logger := slog.New(mangolog.NewMangoLogger(cfg))
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, mangolog.APPLICATION, "billing-api")
+	ctx = context.WithValue(ctx, mangolog.OPERATION, "invoice-create")
+	ctx = context.WithValue(ctx, mangolog.TYPE, mangolog.BusinessType)
 
-    timeout := mangoenv.EnvAsInt("HTTP_TIMEOUT", 15)
-    deadline := mangotime.TimeAgo(mangotime.EndOfDay(time.Now()))
+	timeout := mangoenv.EnvAsInt("HTTP_TIMEOUT", 15)
+	deadline := mangotime.TimeAgo(mangotime.EndOfDay(time.Now()))
 
-    logger.InfoContext(ctx, "ready to serve",
-        slog.Int("timeoutSeconds", timeout),
-        slog.String("deadline", deadline),
-    )
+	logger.InfoContext(ctx, "ready to serve",
+		slog.Int("timeoutSeconds", timeout),
+		slog.String("deadline", deadline),
+	)
 }
 ```
 
@@ -164,7 +169,8 @@ Run the snippet to see CLI-friendly output plus structured JSON (when file loggi
 
 ### <a id="developer-guide"></a>🧑‍💻 Developer Guide
 
-Looking for end-to-end examples that combine logging, environment loading, random data generation, time helpers, and more?  
+Looking for end-to-end examples that combine logging, environment loading, random data generation, time helpers, and
+more?  
 👉 Jump into [documentation/docs/guide.md](documentation/docs/guide).
 
 ## <a id="usage"></a>👨‍💻 Usage
@@ -173,26 +179,26 @@ The packages are intentionally orthogonal, so feel free to mix and match:
 
 ```go
 import (
-    "log/slog"
-    "time"
-    mangorand "github.com/bitstep-ie/mango-go/pkg/random"
-    mangoslices "github.com/bitstep-ie/mango-go/pkg/slices"
-    mangotime "github.com/bitstep-ie/mango-go/pkg/time"
+"log/slog"
+"time"
+mangorand "github.com/bitstep-ie/mango-go/pkg/random"
+mangoslices "github.com/bitstep-ie/mango-go/pkg/slices"
+mangotime "github.com/bitstep-ie/mango-go/pkg/time"
 )
 
 func demo() {
-    orders := []int{1, 2, 2, 3}
-    if mangoslices.EqualsIgnoreOrder(orders, []int{3, 2, 2, 1}) {
-        token := mangorand.Password(20, mangorand.PasswordOptions{Letters: true, Digits: true})
-        start := mangotime.StartOfDay(time.Now())
-        end := mangotime.EndOfDay(time.Now())
+orders := []int{1, 2, 2, 3}
+if mangoslices.EqualsIgnoreOrder(orders, []int{3, 2, 2, 1}) {
+token := mangorand.Password(20, mangorand.PasswordOptions{Letters: true, Digits: true})
+start := mangotime.StartOfDay(time.Now())
+end := mangotime.EndOfDay(time.Now())
 
-        slog.Info("processing window",
-            slog.String("token", token),
-            slog.String("start", start.Format(time.RFC3339)),
-            slog.String("end", end.Format(time.RFC3339)),
-        )
-    }
+slog.Info("processing window",
+slog.String("token", token),
+slog.String("start", start.Format(time.RFC3339)),
+slog.String("end", end.Format(time.RFC3339)),
+)
+}
 }
 ```
 

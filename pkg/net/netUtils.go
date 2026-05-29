@@ -14,3 +14,9 @@ func IsValidIPv6(value string) bool {
 	addr, err := netip.ParseAddr(value)
 	return err == nil && addr.Is6()
 }
+
+// IsValidIP reports whether value is a syntactically valid IPv4 or IPv6 address.
+func IsValidIP(value string) bool {
+	_, err := netip.ParseAddr(value)
+	return err == nil
+}
