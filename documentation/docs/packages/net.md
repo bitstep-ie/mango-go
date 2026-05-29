@@ -86,6 +86,8 @@ mangonet.IsValidURL("not a url")            // false (invalid format)
 
 ## Behavior Notes
 
+### IP Validation Specifics
+
 - Validation is syntactic only; it does not check host reachability.
 - Reserved/private/public ranges are all treated as valid if the address format is correct.
 - The helper does not trim input. Normalize user input before validation if needed.
