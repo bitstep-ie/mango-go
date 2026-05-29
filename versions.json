@@ -1,25 +1,8 @@
 [
   {
-    "version": "dbdd877",
-    "title": "dbdd877",
-    "aliases": []
-  },
-  {
     "version": "dev",
     "title": "dev",
     "aliases": []
-  },
-  {
-    "version": "824f3e9",
-    "title": "824f3e9",
-    "aliases": []
-  },
-  {
-    "version": "78bfaf4",
-    "title": "78bfaf4",
-    "aliases": [
-      "development"
-    ]
   },
   {
     "version": "v0.1.0",
