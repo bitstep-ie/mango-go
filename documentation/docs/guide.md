@@ -133,10 +133,11 @@ package validate
 import mangonet "github.com/bitstep-ie/mango-go/pkg/net"
 
 func IsAllowedIP(ip string) bool {
-    return mangonet.IsValidIPv4(ip) || mangonet.IsValidIPv6(ip)
+    return mangonet.IsValidIP(ip)
 }
 ```
 
+- `IsValidIP` accepts both IPv4 and IPv6.
 - `IsValidIPv4` accepts only valid IPv4 addresses.
 - `IsValidIPv6` accepts only valid IPv6 addresses (including IPv4-mapped forms like `::ffff:192.168.1.1`).
 - Both helpers are format checks only; they do not verify DNS/host reachability.

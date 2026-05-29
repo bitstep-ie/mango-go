@@ -56,3 +56,35 @@ func TestIsValidIPv6(t *testing.T) {
 		})
 	}
 }
+
+func TestIsValidIP(t *testing.T) {
+	tests := []struct {
+		name  string
+		value string
+		want  bool
+	}{
+		// IPv4 cases
+		{name: "valid ipv4 localhost", value: "127.0.0.1", want: true},
+		{name: "valid ipv4 private", value: "192.168.1.10", want: true},
+		{name: "valid ipv4 zero", value: "0.0.0.0", want: true},
+		{name: "valid ipv4 broadcast", value: "255.255.255.255", want: true},
+		// IPv6 cases
+		{name: "valid ipv6 loopback", value: "::1", want: true},
+		{name: "valid ipv6 compressed", value: "2001:db8::1", want: true},
+		{name: "valid ipv6 full", value: "2001:0db8:85a3:0000:0000:8a2e:0370:7334", want: true},
+		{name: "valid ipv6 mapped ipv4", value: "::ffff:192.168.1.1", want: true},
+		// Invalid cases
+		{name: "empty", value: "", want: false},
+		{name: "invalid ipv4 octet", value: "256.1.2.3", want: false},
+		{name: "invalid ipv4 count", value: "10.0.1", want: false},
+		{name: "invalid ipv6 hex", value: "2001:db8::zzzz", want: false},
+		{name: "contains whitespace", value: " 192.168.1.1 ", want: false},
+		{name: "invalid format", value: "not-an-ip", want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, IsValidIP(tt.value))
+		})
+	}
+}

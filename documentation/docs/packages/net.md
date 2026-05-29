@@ -16,10 +16,19 @@ func allowHosts(ipv4 string, ipv6 string) bool {
 
 | Function | Purpose |
 | --- | --- |
+| `IsValidIP(value string) bool` | returns `true` only for syntactically valid IPv4 or IPv6 addresses |
 | `IsValidIPv4(value string) bool` | returns `true` only for syntactically valid IPv4 addresses |
 | `IsValidIPv6(value string) bool` | returns `true` only for syntactically valid IPv6 addresses |
 
 ## Examples
+
+### Accept any valid IP (v4 or v6)
+
+```go
+mangonet.IsValidIP("127.0.0.1")       // true
+mangonet.IsValidIP("::1")             // true
+mangonet.IsValidIP("invalid")         // false
+```
 
 ### Accept valid IPv4
 
