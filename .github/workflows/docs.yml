@@ -46,7 +46,7 @@ jobs:
         working-directory: documentation
         if: ${{ !github.event.release || github.event.release.tag_name == '' }}
         run: |
-          mike deploy dev dev -u --push         
+          mike deploy dev -u --push         
 
       - name: Default latest
         working-directory: documentation
