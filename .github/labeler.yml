@@ -17,3 +17,7 @@ config:
 legal:
   - changed-files:
       - any-glob-to-any-file: ["LICENSE*", "NOTICES*", "CODE_OF_CONDUCT*", "CONTRIBUTING*", "SECURITY*"]
+
+# 'dependency-management' label to any changes coming from dependabot[bot]
+dependency-management:
+  - author: "dependabot[bot]"
