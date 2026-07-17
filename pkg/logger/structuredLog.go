@@ -1,6 +1,7 @@
 package logger
 
 import "log/slog"
+import "encoding/json"
 
 // StructuredLog is the structure of every log entry (output)
 type StructuredLog struct {
@@ -8,17 +9,19 @@ type StructuredLog struct {
 	Timestamp string `json:"ts"`
 
 	// Type of the log entry. One of: Security, Business, or Performance
-	Type string `json:"type"`
+	//Type string `json:"type"`
 
 	// Application of which this log entry belongs. Should be corresponding with TAT
-	Application string `json:"application"`
+	//Application string `json:"application"`
 
 	// Operation is synonymous with the application/system's function or method.
 	// Consider such examples: search, create, health, user_registration, checkout, token_issueance, case-status, etc.
-	Operation string `json:"operation"`
+	//Operation string `json:"operation"`
 
 	// Correlationid from the caller or self generated allowing to relate different systems around one
-	Correlationid string `json:"correlationid"`
+	//Correlationid string `json:"correlationid"`
+
+	ContextFields map[string]string
 
 	// LogId is a unique identifier for each log entry - Helps in referring to logs when searching
 	LogId string `json:"logId"`
@@ -33,11 +36,36 @@ type StructuredLog struct {
 	Attributes map[string]interface{} `json:"attributes"`
 }
 
-// Helper function to convert []slog.Attr to a map[string]interface{}
+// ToMap helps to convert []slog.Attr to a map[string]interface{}
 func ToMap(attrs []slog.Attr) map[string]interface{} {
 	result := make(map[string]interface{})
 	for _, attr := range attrs {
 		result[attr.Key] = attr.Value.Any()
 	}
 	return result
+}
+
+// MarshalJSON customizes JSON marshaling by flattening ContextFields
+// Each ContextConfigField's Value becomes a top-level JSON field
+func (sl *StructuredLog) MarshalJSON() ([]byte, error) {
+	// Create a temporary map to hold all fields
+	output := map[string]interface{}{
+		"ts":         sl.Timestamp,
+		"logId":      sl.LogId,
+		"level":      sl.Level,
+		"message":    sl.Message,
+		"attributes": sl.Attributes,
+	}
+
+	// Flatten ContextFields: add each field's value as a top-level key
+	if sl.ContextFields != nil {
+		println("ME IS HERE")
+		for contextKey, contextValue := range sl.ContextFields {
+			output[contextKey] = contextValue
+		}
+	}
+
+	output["MADA"] = "I AM COOL"
+
+	return json.Marshal(output)
 }

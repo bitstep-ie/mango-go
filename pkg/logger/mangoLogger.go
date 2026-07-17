@@ -9,7 +9,6 @@ import (
 	"github.com/natefinch/lumberjack"
 	"log/slog"
 	"os"
-	"slices"
 	"unsafe"
 )
 
@@ -18,8 +17,6 @@ type MangoLogger struct {
 	Config    *LogConfig
 	LogWriter *lumberjack.Logger
 }
-
-var errStrictModeOn = fmt.Errorf("[STRICT_MODE ON] without required context fields %v", REQUIRED_FIELDS)
 
 func NewMangoLogger(config *LogConfig) *MangoLogger {
 	// Future idea to have multiple "appenders" in the mangoLogger that one can add, each with it's own logging configuration that it looks at
@@ -80,6 +77,7 @@ func (sl MangoLogger) Handle(context context.Context, record slog.Record) error 
 	}
 
 	jsonOut, err := json.Marshal(log)
+	// TODO this is where the log marshal happens
 	if err != nil {
 		fmt.Println("Failed to marshal the StructuredLog. Internal error, should never happen")
 		return err
@@ -245,64 +243,42 @@ func getAllAttrs(record slog.Record) []slog.Attr {
 	return attrs
 }
 
+// TODO - think about this because need to save the config into the log and not sure how
 func (sl MangoLogger) handleRequiredFields(context context.Context, logOutput *StructuredLog) error {
-	if sl.Config.MangoConfig.CorrelationId.Strict {
-		REQUIRED_FIELDS = append(REQUIRED_FIELDS, CORRELATION_ID)
-	}
-	for _, label := range REQUIRED_FIELDS {
-		err := handleEachField(context, logOutput, label, sl)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func handleEachField(context context.Context, logOutput *StructuredLog, label ctxKey, sl MangoLogger) error {
-	if value, ok := context.Value(label).(string); !ok {
-		err := handleValueMissing(label, sl, logOutput)
-		if err != nil {
-			return err
-		}
-	} else {
-		err := handleExistentValues(label, logOutput, value, sl)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func handleValueMissing(label ctxKey, sl MangoLogger, logOutput *StructuredLog) error {
-	if CORRELATION_ID == label {
-		if sl.Config.MangoConfig.CorrelationId.AutoGenerate {
-			logOutput.Correlationid = uuid.New().String() // generate new UUID for correlation if missing from context
-		} else {
-			return fmt.Errorf("%w - required in context and not present (or wrong type - expected string). This can be added by doing: context.WithValue(newCtx, mangologger.%s, \"desiredValue\")", errStrictModeOn, label)
-		}
-	} else {
-		if sl.Config.MangoConfig.Strict {
-			return fmt.Errorf("%w - required in context and not present (or wrong type - expected string). This can be added by doing: context.WithValue(newCtx, mangologger.%s, \"desiredValue\")", errStrictModeOn, label)
-		}
-	}
-	return nil
-}
-
-func handleExistentValues(label ctxKey, logOutput *StructuredLog, value string, sl MangoLogger) error {
-	switch label { // set actual
-	case OPERATION:
-		logOutput.Operation = value
-	case APPLICATION:
-		logOutput.Application = value
-	case TYPE:
-		if sl.Config.MangoConfig.Strict {
-			if !slices.Contains(ALLOWED_TYPES, value) {
-				return fmt.Errorf("%w - [%s] required in context and not present (or wrong type - expected string). Current value [%s] is not in the allowed list: %+q", errStrictModeOn, label, value, ALLOWED_TYPES)
+	if sl.Config.ContextConfig.Strict {
+		for _, requiredConfig := range *sl.Config.ContextConfig.Required {
+			err := handleRequiredField(context, logOutput, requiredConfig, sl)
+			if err != nil {
+				return err
 			}
 		}
-		logOutput.Type = value
 	}
 	return nil
+}
+
+func handleRequiredField(context context.Context, logOutput *StructuredLog, requiredConfig ContextConfigField, sl MangoLogger) error {
+	if logOutput.ContextFields == nil {
+		logOutput.ContextFields = make(map[string]string)
+	}
+	if requiredConfig.Value != "" {
+		logOutput.ContextFields[requiredConfig.Name] = requiredConfig.Value
+		return nil
+	}
+	if requiredConfig.AutoGenerate { // TODO - this will be enhanced when it's a function
+		newUUID, err := uuid.NewUUID()
+		if err != nil {
+			return err
+		}
+		logOutput.ContextFields[requiredConfig.Name] = newUUID.String()
+		return nil
+	}
+
+	if value, ok := context.Value(requiredConfig.Name).(string); !ok {
+		return fmt.Errorf("`%s` value required but not set in context", requiredConfig.Name)
+	} else {
+		logOutput.ContextFields[requiredConfig.Name] = value
+		return nil
+	}
 }
 
 func (sl MangoLogger) buildLog(context context.Context, record slog.Record) (*StructuredLog, error) {
@@ -314,9 +290,9 @@ func (sl MangoLogger) buildLog(context context.Context, record slog.Record) (*St
 		return logOutput, err
 	}
 
-	if value, ok := context.Value(CORRELATION_ID).(string); ok {
-		logOutput.Correlationid = value
-	}
+	//if value, ok := context.Value(CORRELATION_ID).(string); ok {
+	//	logOutput.Correlationid = value
+	//}
 
 	return logOutput, nil
 }
@@ -326,10 +302,10 @@ func (sl MangoLogger) makeBaseLog(record slog.Record) *StructuredLog {
 	logOutput.Timestamp = record.Time.Format(RFC3339NanoMC)
 	logOutput.LogId = uuid.New().String() // generate a new UUID for each log entry
 	logOutput.Level = record.Level
-	logOutput.Operation = "unknownOperation"
-	logOutput.Application = "unknownApplication"
-	logOutput.Type = "unknownType"
-	logOutput.Correlationid = ""
+	//logOutput.Operation = "unknownOperation"
+	//logOutput.Application = "unknownApplication"
+	//logOutput.Type = "unknownType"
+	//logOutput.Correlationid = ""
 	logOutput.Message = record.Message
 	logOutput.Attributes = ToMap(mergeAttrs(sl.attrs, getAllAttrs(record)))
 	return logOutput

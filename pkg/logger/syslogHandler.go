@@ -71,7 +71,8 @@ func (sl MangoLogger) handleSyslogOutput(log *StructuredLog, jsonOut []byte) err
 		return fmt.Errorf("facility level not valid")
 	}
 
-	syslogWriter, err := syslog.New(syslog.Priority(sl.Config.Out.Syslog.priority), log.Application)
+	//TODO - figure out what application to use in a wordl where context.Application is not neccessarily there anymore
+	syslogWriter, err := syslog.New(syslog.Priority(sl.Config.Out.Syslog.priority), "application")
 	if err != nil {
 		fmt.Println("Error writing to syslog")
 		return fmt.Errorf("error writing to syslog: %w", err)

@@ -36,19 +36,19 @@ const (
 
 // LogConfig is the main configuration struct for Mango logging
 type LogConfig struct {
-	// MangoConfig is the mango configuration node
-	MangoConfig *MangoConfig `yaml:"mango" json:"mango"`
+	// ContextConfig is the mango configuration node
+	ContextConfig *ContextConfig `yaml:"context" json:"context"`
 
 	// Out is the node holding configuration about the file output
 	Out *OutConfig `yaml:"out" json:"out"`
 }
 
-type MangoConfig struct {
-	// Strict Will enforce the REQUIRED_FIELDS to be present in each log context
+type ContextConfig struct {
+	// Strict Will enforce the fields defined to be required are set for each log entry
 	Strict bool `yaml:"strict" json:"strict"`
 
-	// CorrelationId configuration
-	CorrelationId *CorrelationIdConfig `yaml:"correlation-id" json:"correlationId"`
+	// Required are the list of context configuration fields to be enforced as part of the log context based on the strict flag
+	Required *[]ContextConfigField `yaml:"required" json:"required"`
 }
 
 // OutConfig provides a structure for defining the configuration of all the logging output
@@ -66,13 +66,13 @@ type OutConfig struct {
 	Syslog *SyslogConfig `yaml:"syslog" json:"syslog"`
 }
 
-// CorrelationIdConfig defines the configuration of correlationId across mangologger
-type CorrelationIdConfig struct {
-	// Strict enforces CorrelationId as part of the REQUIRED_FIELDS to be present in each log context
-	Strict bool `yaml:"strict" json:"strict"`
+// ContextConfigField defines the configuration of correlationId across mangologger
+type ContextConfigField struct {
+	// Name is the name of the context field to be enforced as part of the log context based on the strict flag
+	Name string `yaml:"name" json:"name"`
 
-	// AutoGenerate will generate a correlationId if missing from context
-	// This will NOT be generated BEFORE REQUIRED_FIELDS restriction, therefore if correlationId is missing in a strict setup, it will fail regardless of auto-generate flag
+	Value string `yaml:"value" json:"value"`
+	// AutoGenerate is a placeholder for now - TODO
 	AutoGenerate bool `yaml:"auto-generate" json:"autoGenerate"`
 }
 
