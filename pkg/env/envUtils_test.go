@@ -1,242 +1,408 @@
 package env
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
+	"strconv"
 	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestEnvOrDefault(t *testing.T) {
-	const key = "ENV_OR_DEFAULT"
-	const defaultVal = "default"
+// ---------------------------------------------------------------------------
+// Deprecated alias smoke tests – ensure legacy methods still behave correctly
+// ---------------------------------------------------------------------------
 
-	err := os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := EnvOrDefault(key, defaultVal); got != defaultVal {
-		t.Errorf("Expected default value %q, got %q", defaultVal, got)
-	}
+func TestDeprecated_EnvOrDefault(t *testing.T) {
+	const key = "DEPRECATED_ENV_OR_DEFAULT"
 
-	expected := "actual"
-	err = os.Setenv(key, expected)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := EnvOrDefault(key, defaultVal); got != expected {
-		t.Errorf("Expected env value %q, got %q", expected, got)
-	}
-	err = os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+	unsetEnv(t, key)
+	assert.Equal(t, "fallback", EnvOrDefault(key, "fallback"))
+
+	setEnv(t, key, "real")
+	assert.Equal(t, "real", EnvOrDefault(key, "fallback"))
 }
 
-func TestMustEnv(t *testing.T) {
-	const key = "MUST_ENV"
-	expected := "required"
+func TestDeprecated_MustEnv(t *testing.T) {
+	const key = "DEPRECATED_MUST_ENV"
 
-	err := os.Setenv(key, expected)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := MustEnv(key); got != expected {
-		t.Errorf("Expected %q, got %q", expected, got)
-	}
-	err = os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+	setEnv(t, key, "present")
+	assert.Equal(t, "present", MustEnv(key))
 
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic when env var is missing")
-		}
-	}()
-	MustEnv(key)
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustEnv(key) })
 }
 
-func TestMustEnv_PanicWhenMissing(t *testing.T) {
-	const key = "MUST_ENV_MISSING"
-	err := os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+func TestDeprecated_EnvAsInt(t *testing.T) {
+	const key = "DEPRECATED_ENV_AS_INT"
 
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic when environment variable %q is missing", key)
-		}
-	}()
-	MustEnv(key)
+	unsetEnv(t, key)
+	assert.Equal(t, 7, EnvAsInt(key, 7))
+
+	setEnv(t, key, "99")
+	assert.Equal(t, 99, EnvAsInt(key, 7))
+
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { EnvAsInt(key, 7) })
 }
 
-func TestEnvAsInt(t *testing.T) {
-	const key = "ENV_AS_INT"
-	const defaultVal = 42
+func TestDeprecated_MustEnvAsInt(t *testing.T) {
+	const key = "DEPRECATED_MUST_ENV_AS_INT"
 
-	err := os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := EnvAsInt(key, defaultVal); got != defaultVal {
-		t.Errorf("Expected default int %d, got %d", defaultVal, got)
-	}
+	setEnv(t, key, "42")
+	assert.Equal(t, 42, MustEnvAsInt(key))
 
-	err = os.Setenv(key, "100")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := EnvAsInt(key, defaultVal); got != 100 {
-		t.Errorf("Expected 100, got %d", got)
-	}
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { MustEnvAsInt(key) })
 
-	err = os.Setenv(key, "not_an_int")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic for non-integer value")
-		}
-	}()
-	EnvAsInt(key, defaultVal)
-	err = os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustEnvAsInt(key) })
 }
 
-func TestMustEnvAsInt(t *testing.T) {
-	const key = "MUST_ENV_AS_INT"
+func TestDeprecated_EnvAsBool(t *testing.T) {
+	const key = "DEPRECATED_ENV_AS_BOOL"
 
-	err := os.Setenv(key, "200")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := MustEnvAsInt(key); got != 200 {
-		t.Errorf("Expected 200, got %d", got)
-	}
+	unsetEnv(t, key)
+	assert.True(t, EnvAsBool(key, true))
 
-	err = os.Setenv(key, "not_an_int")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic for non-integer value")
-		}
-	}()
-	MustEnvAsInt(key)
+	setEnv(t, key, "false")
+	assert.False(t, EnvAsBool(key, true))
 
-	err = os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic for missing env var")
-		}
-	}()
-	MustEnvAsInt(key)
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { EnvAsBool(key, true) })
 }
 
-func TestMustEnvAsInt_PanicWhenMissing(t *testing.T) {
-	const key = "MUST_ENV_AS_INT_MISSING"
-	err := os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+func TestDeprecated_MustEnvAsBool(t *testing.T) {
+	const key = "DEPRECATED_MUST_ENV_AS_BOOL"
 
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic when environment variable %q is missing", key)
-		}
-	}()
-	MustEnvAsInt(key)
+	setEnv(t, key, "true")
+	assert.True(t, MustEnvAsBool(key))
+
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { MustEnvAsBool(key) })
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustEnvAsBool(key) })
 }
 
-func TestEnvAsBool(t *testing.T) {
-	const key = "ENV_AS_BOOL"
-	const defaultVal = true
+// ---------------------------------------------------------------------------
+// String
+// ---------------------------------------------------------------------------
 
-	err := os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := EnvAsBool(key, defaultVal); got != defaultVal {
-		t.Errorf("Expected default bool %v, got %v", defaultVal, got)
-	}
+func TestStringDefault(t *testing.T) {
+	const key = "STRING_DEFAULT"
 
-	err = os.Setenv(key, "false")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := EnvAsBool(key, defaultVal); got != false {
-		t.Errorf("Expected false, got %v", got)
-	}
+	unsetEnv(t, key)
+	v, err := StringDefault(key, "fallback")
+	assert.NoError(t, err)
+	assert.Equal(t, "fallback", v)
 
-	err = os.Setenv(key, "not_a_bool")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic for non-boolean value")
-		}
-	}()
-	EnvAsBool(key, defaultVal)
-	err = os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+	setEnv(t, key, "hello")
+	v, err = StringDefault(key, "fallback")
+	assert.NoError(t, err)
+	assert.Equal(t, "hello", v)
 }
 
-func TestMustEnvAsBool(t *testing.T) {
-	const key = "MUST_ENV_AS_BOOL"
+func TestString(t *testing.T) {
+	const key = "STRING"
 
-	err := os.Setenv(key, "true")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	if got := MustEnvAsBool(key); got != true {
-		t.Errorf("Expected true, got %v", got)
-	}
+	setEnv(t, key, "world")
+	v, err := String(key)
+	assert.NoError(t, err)
+	assert.Equal(t, "world", v)
 
-	err = os.Setenv(key, "not_a_bool")
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic for non-boolean value")
-		}
-	}()
-	MustEnvAsBool(key)
-
-	err = os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic for missing env var")
-		}
-	}()
-	MustEnvAsBool(key)
+	unsetEnv(t, key)
+	_, err = String(key)
+	assert.Error(t, err)
 }
 
-func TestMustEnvAsBool_PanicWhenMissing(t *testing.T) {
-	const key = "MUST_ENV_AS_BOOL_MISSING"
-	err := os.Unsetenv(key)
-	if err != nil {
-		assert.NoError(t, err, "No error expected")
-	}
+func TestMustString(t *testing.T) {
+	const key = "MUST_STRING"
 
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Expected panic when environment variable %q is missing", key)
-		}
-	}()
-	MustEnvAsBool(key)
+	setEnv(t, key, "required")
+	assert.Equal(t, "required", MustString(key))
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustString(key) })
+}
+
+// ---------------------------------------------------------------------------
+// Int
+// ---------------------------------------------------------------------------
+
+func TestIntDefault(t *testing.T) {
+	const key = "INT_DEFAULT"
+
+	unsetEnv(t, key)
+	v, err := IntDefault(key, 10)
+	assert.NoError(t, err)
+	assert.Equal(t, 10, v)
+
+	setEnv(t, key, "55")
+	v, err = IntDefault(key, 10)
+	assert.NoError(t, err)
+	assert.Equal(t, 55, v)
+
+	setEnv(t, key, "not-an-int")
+	_, err = IntDefault(key, 10)
+	assert.Error(t, err)
+}
+
+func TestInt(t *testing.T) {
+	const key = "INT"
+
+	setEnv(t, key, "123")
+	v, err := Int(key)
+	assert.NoError(t, err)
+	assert.Equal(t, 123, v)
+
+	setEnv(t, key, "bad")
+	_, err = Int(key)
+	assert.Error(t, err)
+
+	unsetEnv(t, key)
+	_, err = Int(key)
+	assert.Error(t, err)
+}
+
+func TestMustInt(t *testing.T) {
+	const key = "MUST_INT"
+
+	setEnv(t, key, "7")
+	assert.Equal(t, 7, MustInt(key))
+
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { MustInt(key) })
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustInt(key) })
+}
+
+// ---------------------------------------------------------------------------
+// Bool
+// ---------------------------------------------------------------------------
+
+func TestBoolDefault(t *testing.T) {
+	const key = "BOOL_DEFAULT"
+
+	unsetEnv(t, key)
+	v, err := BoolDefault(key, true)
+	assert.NoError(t, err)
+	assert.True(t, v)
+
+	setEnv(t, key, "false")
+	v, err = BoolDefault(key, true)
+	assert.NoError(t, err)
+	assert.False(t, v)
+
+	// strconv.ParseBool accepts "1" as true
+	setEnv(t, key, "1")
+	v, err = BoolDefault(key, false)
+	assert.NoError(t, err)
+	assert.True(t, v)
+
+	setEnv(t, key, "not-a-bool")
+	_, err = BoolDefault(key, false)
+	assert.Error(t, err)
+}
+
+func TestBool(t *testing.T) {
+	const key = "BOOL"
+
+	setEnv(t, key, "true")
+	v, err := Bool(key)
+	assert.NoError(t, err)
+	assert.True(t, v)
+
+	setEnv(t, key, "bad")
+	_, err = Bool(key)
+	assert.Error(t, err)
+
+	unsetEnv(t, key)
+	_, err = Bool(key)
+	assert.Error(t, err)
+}
+
+func TestMustBool(t *testing.T) {
+	const key = "MUST_BOOL"
+
+	setEnv(t, key, "false")
+	assert.False(t, MustBool(key))
+
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { MustBool(key) })
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustBool(key) })
+}
+
+// ---------------------------------------------------------------------------
+// Duration
+// ---------------------------------------------------------------------------
+
+func TestDurationDefault(t *testing.T) {
+	const key = "DURATION_DEFAULT"
+
+	unsetEnv(t, key)
+	v, err := DurationDefault(key, 5*time.Second)
+	assert.NoError(t, err)
+	assert.Equal(t, 5*time.Second, v)
+
+	setEnv(t, key, "2m")
+	v, err = DurationDefault(key, 5*time.Second)
+	assert.NoError(t, err)
+	assert.Equal(t, 2*time.Minute, v)
+
+	setEnv(t, key, "bad-duration")
+	_, err = DurationDefault(key, 5*time.Second)
+	assert.Error(t, err)
+}
+
+func TestDuration(t *testing.T) {
+	const key = "DURATION"
+
+	setEnv(t, key, "90m")
+	v, err := Duration(key)
+	assert.NoError(t, err)
+	assert.Equal(t, 90*time.Minute, v)
+
+	setEnv(t, key, "bad")
+	_, err = Duration(key)
+	assert.Error(t, err)
+
+	unsetEnv(t, key)
+	_, err = Duration(key)
+	assert.Error(t, err)
+}
+
+func TestMustDuration(t *testing.T) {
+	const key = "MUST_DURATION"
+
+	setEnv(t, key, "1h")
+	assert.Equal(t, time.Hour, MustDuration(key))
+
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { MustDuration(key) })
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustDuration(key) })
+}
+
+// ---------------------------------------------------------------------------
+// StringSplice
+// ---------------------------------------------------------------------------
+
+func TestStringSpliceDefault(t *testing.T) {
+	const key = "STRING_SPLICE_DEFAULT"
+
+	unsetEnv(t, key)
+	v, err := StringSpliceDefault(key, ",", []string{"a", "b"})
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"a", "b"}, v)
+
+	setEnv(t, key, "x,y,z")
+	v, err = StringSpliceDefault(key, ",", []string{"a", "b"})
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"x", "y", "z"}, v)
+
+	// custom separator
+	setEnv(t, key, "alpha|beta|gamma")
+	v, err = StringSpliceDefault(key, "|", []string{"default"})
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"alpha", "beta", "gamma"}, v)
+}
+
+func TestStringSplice(t *testing.T) {
+	const key = "STRING_SPLICE"
+
+	setEnv(t, key, "one,two,three")
+	v, err := StringSplice(key, ",")
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"one", "two", "three"}, v)
+
+	unsetEnv(t, key)
+	_, err = StringSplice(key, ",")
+	assert.Error(t, err)
+}
+
+func TestMustStringSplice(t *testing.T) {
+	const key = "MUST_STRING_SPLICE"
+
+	setEnv(t, key, "red,green,blue")
+	assert.Equal(t, []string{"red", "green", "blue"}, MustStringSplice(key, ","))
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustStringSplice(key, ",") })
+}
+
+// ---------------------------------------------------------------------------
+// Generic: AsDefault / As / MustAs
+// ---------------------------------------------------------------------------
+
+func TestAsDefault(t *testing.T) {
+	const key = "AS_DEFAULT"
+
+	unsetEnv(t, key)
+	v, err := AsDefault(key, 99, strconv.Atoi)
+	assert.NoError(t, err)
+	assert.Equal(t, 99, v)
+
+	setEnv(t, key, "42")
+	v, err = AsDefault(key, 99, strconv.Atoi)
+	assert.NoError(t, err)
+	assert.Equal(t, 42, v)
+
+	setEnv(t, key, "bad")
+	_, err = AsDefault(key, 99, strconv.Atoi)
+	assert.Error(t, err)
+}
+
+func TestAs(t *testing.T) {
+	const key = "AS"
+
+	setEnv(t, key, "7")
+	v, err := As(key, strconv.Atoi)
+	assert.NoError(t, err)
+	assert.Equal(t, 7, v)
+
+	setEnv(t, key, "bad")
+	_, err = As(key, strconv.Atoi)
+	assert.Error(t, err)
+
+	unsetEnv(t, key)
+	_, err = As(key, strconv.Atoi)
+	assert.Error(t, err)
+}
+
+func TestMustAs(t *testing.T) {
+	const key = "MUST_AS"
+
+	setEnv(t, key, "24")
+	assert.Equal(t, 24, MustAs(key, strconv.Atoi))
+
+	setEnv(t, key, "bad")
+	assert.Panics(t, func() { MustAs(key, strconv.Atoi) })
+
+	unsetEnv(t, key)
+	assert.Panics(t, func() { MustAs(key, strconv.Atoi) })
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+func unsetEnv(t *testing.T, key string) {
+	t.Helper()
+	assert.NoError(t, os.Unsetenv(key))
+	t.Cleanup(func() {
+		_ = os.Unsetenv(key)
+	})
+}
+
+func setEnv(t *testing.T, key, value string) {
+	t.Helper()
+	assert.NoError(t, os.Setenv(key, value))
+	t.Cleanup(func() {
+		_ = os.Unsetenv(key)
+	})
 }
