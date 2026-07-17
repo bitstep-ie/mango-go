@@ -110,16 +110,20 @@ type Config struct {
 }
 
 func Load() Config {
+	port, _ := mangoenv.IntDefault("PORT", 8080)
+	enableHTTPS, _ := mangoenv.BoolDefault("ENABLE_HTTPS", false)
+
     return Config{
-        Port:        mangoenv.EnvAsInt("PORT", 8080),
-        EnableHTTPS: mangoenv.EnvAsBool("ENABLE_HTTPS", false),
-        DBURL:       mangoenv.MustEnv("DATABASE_URL"),
+        Port:        port,
+        EnableHTTPS: enableHTTPS,
+        DBURL:       mangoenv.MustString("DATABASE_URL"),
     }
 }
 ```
 
-- Use `EnvOrDefault`/`EnvAsInt` for soft defaults.
-- Prefer `MustEnv*` variants for critical values so misconfiguration fails fast during startup.
+- Use `*Default` helpers (for example `StringDefault`, `IntDefault`, `BoolDefault`) for soft defaults.
+- Prefer `Must*` variants for critical values so misconfiguration fails fast during startup.
+- Deprecated legacy helpers (`EnvOrDefault`, `MustEnv`, `EnvAsInt`, `MustEnvAsInt`, `EnvAsBool`, `MustEnvAsBool`) are scheduled for removal in `v1.0.0`.
 
 ---
 
