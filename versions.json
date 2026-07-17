@@ -2,14 +2,19 @@
   {
     "version": "untagged-c380ff9ea7d5f3dacf63",
     "title": "untagged-c380ff9ea7d5f3dacf63",
-    "aliases": [
-      "latest"
-    ]
+    "aliases": []
   },
   {
     "version": "dev",
     "title": "dev",
     "aliases": []
+  },
+  {
+    "version": "v0.2.0",
+    "title": "v0.2.0",
+    "aliases": [
+      "latest"
+    ]
   },
   {
     "version": "v0.1.0",
