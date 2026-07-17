@@ -155,7 +155,10 @@ func main() {
 	ctx = context.WithValue(ctx, mangolog.OPERATION, "invoice-create")
 	ctx = context.WithValue(ctx, mangolog.TYPE, mangolog.BusinessType)
 
-	timeout := mangoenv.EnvAsInt("HTTP_TIMEOUT", 15)
+    timeout, err := mangoenv.IntDefault("HTTP_TIMEOUT", 15)
+    if err != nil {
+      panic(err)
+    }
 	deadline := mangotime.TimeAgo(mangotime.EndOfDay(time.Now()))
 
 	logger.InfoContext(ctx, "ready to serve",
@@ -166,6 +169,8 @@ func main() {
 ```
 
 Run the snippet to see CLI-friendly output plus structured JSON (when file logging is enabled).
+
+Deprecated env helpers (`EnvOrDefault`, `MustEnv`, `EnvAsInt`, `MustEnvAsInt`, `EnvAsBool`, `MustEnvAsBool`) are scheduled for removal in `v1.0.0`.
 
 ### <a id="developer-guide"></a>🧑‍💻 Developer Guide
 
