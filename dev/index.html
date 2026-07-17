@@ -653,7 +653,7 @@
 </figure>
 <p>The below is the list of packages mango4go currently offers. Each one links to its dedicated deep-dive.</p>
 <ul>
-<li><a href="packages/env/">env</a> – environment variable helpers (<code>EnvOrDefault</code>, <code>MustEnv</code>, etc.)</li>
+<li><a href="packages/env/">env</a> – environment variable helpers (<code>StringDefault</code>, <code>String</code>, <code>MustString</code>, <code>IntDefault</code>, <code>AsDefault</code>, etc.)</li>
 <li><a href="packages/io/">io</a> – delete/backup/restore files by extension</li>
 <li><a href="packages/logger/">logger</a> – slog handler with CLI/file/syslog sinks</li>
 <li><a href="packages/net/">net</a> – network helpers</li>
@@ -662,6 +662,7 @@
 <li><a href="packages/testutils/">testutils</a> – temp files and assertions for tests</li>
 <li><a href="packages/time/">time</a> – start/end-of-day, duration parsing, “time ago” strings</li>
 </ul>
+<p>Deprecated env helpers (<code>EnvOrDefault</code>, <code>MustEnv</code>, <code>EnvAsInt</code>, <code>MustEnvAsInt</code>, <code>EnvAsBool</code>, <code>MustEnvAsBool</code>) are scheduled for removal in <code>v1.0.0</code>.</p>
 <p>You want more help? See the full <a href="guide/">guide</a>.
 Furthermore, you can find on <a href="https://github.com/bitstep-ie/mango-go/discussions">Discussions forum</a></p>
 

@@ -1109,7 +1109,10 @@
 <span class="normal"><a href="#__codelineno-3-14">14</a></span>
 <span class="normal"><a href="#__codelineno-3-15">15</a></span>
 <span class="normal"><a href="#__codelineno-3-16">16</a></span>
-<span class="normal"><a href="#__codelineno-3-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">config</span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">config</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kn">import</span><span class="w"> </span><span class="nx">mangoenv</span><span class="w"> </span><span class="s">&quot;github.com/bitstep-ie/mango-go/pkg/env&quot;</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a>
@@ -1120,16 +1123,20 @@
 <a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="p">}</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10"></a>
 <a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Load</span><span class="p">()</span><span class="w"> </span><span class="nx">Config</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">Config</span><span class="p">{</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">        </span><span class="nx">Port</span><span class="p">:</span><span class="w">        </span><span class="nx">mangoenv</span><span class="p">.</span><span class="nx">EnvAsInt</span><span class="p">(</span><span class="s">&quot;PORT&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">),</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">        </span><span class="nx">EnableHTTPS</span><span class="p">:</span><span class="w"> </span><span class="nx">mangoenv</span><span class="p">.</span><span class="nx">EnvAsBool</span><span class="p">(</span><span class="s">&quot;ENABLE_HTTPS&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">        </span><span class="nx">DBURL</span><span class="p">:</span><span class="w">       </span><span class="nx">mangoenv</span><span class="p">.</span><span class="nx">MustEnv</span><span class="p">(</span><span class="s">&quot;DATABASE_URL&quot;</span><span class="p">),</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="p">}</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="nx">port</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">mangoenv</span><span class="p">.</span><span class="nx">IntDefault</span><span class="p">(</span><span class="s">&quot;PORT&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">    </span><span class="nx">enableHTTPS</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">mangoenv</span><span class="p">.</span><span class="nx">BoolDefault</span><span class="p">(</span><span class="s">&quot;ENABLE_HTTPS&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">Config</span><span class="p">{</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">        </span><span class="nx">Port</span><span class="p">:</span><span class="w">        </span><span class="nx">port</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">        </span><span class="nx">EnableHTTPS</span><span class="p">:</span><span class="w"> </span><span class="nx">enableHTTPS</span><span class="p">,</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">        </span><span class="nx">DBURL</span><span class="p">:</span><span class="w">       </span><span class="nx">mangoenv</span><span class="p">.</span><span class="nx">MustString</span><span class="p">(</span><span class="s">&quot;DATABASE_URL&quot;</span><span class="p">),</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <ul>
-<li>Use <code>EnvOrDefault</code>/<code>EnvAsInt</code> for soft defaults.</li>
-<li>Prefer <code>MustEnv*</code> variants for critical values so misconfiguration fails fast during startup.</li>
+<li>Use <code>*Default</code> helpers (for example <code>StringDefault</code>, <code>IntDefault</code>, <code>BoolDefault</code>) for soft defaults.</li>
+<li>Prefer <code>Must*</code> variants for critical values so misconfiguration fails fast during startup.</li>
+<li>Deprecated legacy helpers (<code>EnvOrDefault</code>, <code>MustEnv</code>, <code>EnvAsInt</code>, <code>MustEnvAsInt</code>, <code>EnvAsBool</code>, <code>MustEnvAsBool</code>) are scheduled for removal in <code>v1.0.0</code>.</li>
 </ul>
 <hr />
 <h2 id="4-network-helpers-pkgnet">4. Network Helpers (<code>pkg/net</code>)<a class="headerlink" href="#4-network-helpers-pkgnet" title="Permanent link">&para;</a></h2>
