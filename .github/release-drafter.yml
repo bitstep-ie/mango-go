@@ -24,6 +24,12 @@ categories:
     labels:
       - 'chore'
       - 'config'
+
+  - title: '⬆️ Dependency Upgrades'
+    labels:
+      - 'dependency-management'
+
+
 change-template: '- $TITLE (#$NUMBER) by @$AUTHOR'
 change-title-escapes: '\<*_&`' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
