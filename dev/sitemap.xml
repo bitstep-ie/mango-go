@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/guide/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/env/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/io/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/logger/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/net/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/random/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/slices/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/testutils/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
     <url>
          <loc>https://bitstep-ie.github.io/mango-go/dev/packages/time/</loc>
-         <lastmod>2026-07-17</lastmod>
+         <lastmod>2026-07-18</lastmod>
     </url>
 </urlset>
